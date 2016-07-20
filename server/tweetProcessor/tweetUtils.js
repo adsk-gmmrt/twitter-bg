@@ -144,8 +144,9 @@ tweetInCity: function (tweet) {
   }
   return ret;
 },
-wordsInTweets:function(tweet,words){
+wordsInTweets:function(orgTweet,words){
   var isWord = false;
+  tweet = isWord.toLowerCase();
   if(Array.isArray(words))
   {
     var ret = {};
