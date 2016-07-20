@@ -98,13 +98,13 @@ module.exports = {
 
  wordsInCity:function(tweet, words){
   var ret = wordsInTweets(tweet, words);
-  var city =  tweetInCity(tweet);
-  if(Array.isArray(ret))
-  {
-    for (var i = 0; i < ret.length; i++) {
-      ret[i] = ret[i] ? city : ret;
+  if(ret){
+    var city =  tweetInCity(tweet);
+    if(city){
+        return { city : ret};
     }
-  }
+   }
+ return undefined;
 },
 
 locationInRange:function (location, locationBox) {
@@ -145,17 +145,26 @@ tweetInCity: function (tweet) {
   return ret;
 },
 wordsInTweets:function(tweet,words){
+  var isWord = false;
   if(Array.isArray(words))
   {
-    var ret = [];
+    var ret = {};
     for(var i=0; i < words.length; i++ )
     {
-      ret.push( tweet.text.indexOf(words[i])<0 );
+        isWord = tweet.text.indexOf(words[i]) < 0;
+        if(isWord){
+            ret[words[i]]= isWord;
+        }
     }
+    return ret; 
   } 
   else{
-    return( tweet.text.indexOf(words)<0 );
+    isWord = tweet.text.indexOf(words) < 0;
+    if(isWord){
+        return({ words: isWord });
+    }
   }
+  return undefined;
 }
 
 };
