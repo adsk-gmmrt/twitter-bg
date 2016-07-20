@@ -1,19 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" type="text/css" href="/app.css">
-    <script src="lib/angular/angular.js"></script>
-    <script src="app.js"></script>
-  </head>
-  <body ng-app="twigbro.main">
-    <div>
-      <nav ng-controller="twigbroNavController">
-        <span class="nav-title">Twitter's big bro</span>
-        <a class="nav-toright" href="/signout">Sign out</a>
-        <span class="nav-toright">{{api.getProfile().userName}}</span>
-        <img class="nav-toright" src="{{api.getProfile().photoHref}}"></img>
-      </nav>
-      <section ng-controller="twigbroTweetsController">
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/app.css">
+  
+  <script src="lib/angular/angular.js"></script>
+  <script src="lib/angular-route/angular-route.js"></script>
+
+  <script src="app.js"></script>
+  <script src="app.config.js"></script>
+
+  <script src="map-view/map-view.module.js"></script>
+  <script src="map-view/map-view.component.js"></script>
+  <script src="stat-view/stat-view.module.js"></script>
+  <script src="stat-view/stat-view.component.js"></script>
+
+</head>
+
+<body ng-app="twigbro.main">
+  <div>
+    <nav ng-controller="twigbroNavController">
+      <span class="nav-title">Twitter's big bro</span>
+      <a class="nav-toright" href="/signout">Sign out</a>
+      <span class="nav-toright">{{api.getProfile().userName}}</span>
+      <img class="nav-toright" src="{{api.getProfile().photoHref}}"></img>
+      <div class="nav-views">
+        <a href="#!/map">Map</a>
+        <a href="#!/stat">Stat</a>
+      </div>
+    </nav>
+
+    <!--<section ng-controller="twigbroTweetsController">
         <div class="tweet" ng-repeat="tweet in api.getTweets()">
           <div  class="tweet-header">
             <span class="tweet-screen">@{{tweet.user.screen_name}}</span>
@@ -23,7 +40,14 @@
             <span>{{tweet.text}}</span>
           </div>
         </div>
-      </section>
-    </div>    
-  </body>
+      </section>-->
+
+  </div>
+
+  <div class="view-container">
+    <div ng-view class="view-frame"></div>
+  </div>
+
+</body>
+
 </html>
