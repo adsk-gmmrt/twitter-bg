@@ -8,7 +8,6 @@ var AggregateFilter = function() {
     'Clinton' : 0,
     'Trump': 0
   };
-  this.coordinates = coordinates;
   this.result = {};
   for(var key in citiesData){
     this.result[key] = this.words;
@@ -25,21 +24,24 @@ AggregateFilter.prototype.process = function(tweet) {
 }
 
 AggregateFilter.prototype.getResult = function() {
-  var ret = [];
-  var retOne = ["city"];
-  for(var key in this.words) {
-    retOne.push(key);
-  }
-  ret.push(retOne);
-  for(var kResult in this.result) {
-    retOne = [ kResult ]; // city 
-    var cityResult = this.result[kResult];
-    for(var key in cityResult) {
-      retOne.push(cityResult[key]); // words count
-    }
-  };
   
-  return ret;
+  return this.result; 
+
+  // var ret = [];
+  // var retOne = ["city"];
+  // for(var key in this.words) {
+  //   retOne.push(key);
+  // }
+  // ret.push(retOne);
+  // for(var kResult in this.result) {
+  //   retOne = [ kResult ]; // city 
+  //   var cityResult = this.result[kResult];
+  //   for(var key in cityResult) {
+  //     retOne.push(cityResult[key]); // words count
+  //   }
+  // };
+  
+  // return ret;
 }
 
 module.exports = AggregateFilter;
