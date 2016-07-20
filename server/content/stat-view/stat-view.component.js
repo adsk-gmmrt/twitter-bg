@@ -18,18 +18,18 @@ angular.
               width: 1000,
               height: 700,
               chartArea: { left: 10, top: 10, bottom: 0, width: "100%" },
+              legend: { numberFormat: "0%" },
               region: 'US',
               displayMode: 'markers',
               colorAxis: { colors: ['blue', 'red'] },
               backgroundColor: '#81d4fa',
-              sizeAxis: { minValue: 0, maxValue: 100 }
+            },
+            formatters: {
+              number: [{
+                columnNum: 1,
+                pattern: "0%"
+              }]
             }
-            // , formatters: {
-            //   number: [{
-            //     columnNum: 1,
-            //     pattern: "$ #,##0.00"
-            //   }]
-            // }
           }
 
           return chart;
