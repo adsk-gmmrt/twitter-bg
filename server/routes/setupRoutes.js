@@ -5,6 +5,8 @@ var request = require('request');
 var twitterKeys = require('../auth/twitterKeys');
 var Twitter = require('twitter');
 var fs = require('fs');
+var streamingThread = require('../tweetProcessor/streamingThread');
+var AggregateFilter = require('../tweetProcessor/aggregateFilter');
 
 module.exports = function(app) {
 
@@ -18,6 +20,11 @@ module.exports = function(app) {
   app.get(config.apiEndpointPrefix + '/live/tweets',
     function(req, res) {
       res.json(tweetUtils.tweetsStub(req.query.limit || 100));
+    });
+
+  app.get(config.apiEndpointPrefix + '/aggregate',
+    function(req, res) {
+      res.json(streamingThread.getFilter(AggregateFilter.KEY).getResult());
     });
 
   app.get(config.apiEndpointPrefix + '/streamtweets',

@@ -21,16 +21,25 @@ StreamingThread.prototype.createStream = function() {
 };
 
 StreamingThread.prototype.onTweet = function(tweet) {
-  this.seenTweets++;
-  for (var i = 0; i < this.filterKeys.length; i++) {
-    this.filters[this.filterKeys].process(tweet);
+  if (this.isValidTweet(tweet)) {
+    this.seenTweets++;
+    var tweetExtract = tweetUtils.filterTweetFields(tweet);
+    for (var i = 0; i < this.filterKeys.length; i++) {
+      this.filters[this.filterKeys[i]].process(tweetExtract);
+    }
   }
 };
 
 StreamingThread.prototype.onStreamError = function(error) {
   console.log('Connection to twitter stream experienced troubles: ', error);
   console.log('Reconnecting...');
-  this.createStream();
+  console.log(error);
+  throw new Error(error);
+  //this.createStream(); 
+};
+
+StreamingThread.prototype.isValidTweet = function(tweet) {
+   return (!!tweet.created_at) && (!!tweet.text) && (!!tweet.id);
 };
 
 StreamingThread.prototype.registerFilter = function(filterKey, filter) {

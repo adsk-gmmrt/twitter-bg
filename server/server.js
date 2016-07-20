@@ -2,6 +2,9 @@ var express = require('express');
 var session = require('express-session');
 var config = require('./config');
 
+//// 
+//// Uncomment following line to start readint stream of tweets
+////
 //console.log(require('./tweetProcessor/setupStreamingThread')());
 
 var app = new express();
