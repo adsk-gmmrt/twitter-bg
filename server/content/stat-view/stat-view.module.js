@@ -61,11 +61,12 @@ angular.module('twigbro.statView', [
       ]
 
       var output = [
-        ['City', 'Population', 'Area']
+        ['City', 'Votes', 'Clinton']
       ];
 
       for (var i = 0; i < cities.length; i++) {
-        output.push([cities[i], Math.floor((Math.random() * 100) + 1), Math.floor((Math.random() * 1000) + 1)]);
+        var clinton = Math.floor((Math.random() * 100) + 1);
+        output.push([cities[i], Math.floor((Math.random() * 100000) + 1), clinton]);
       }
 
       return output;
