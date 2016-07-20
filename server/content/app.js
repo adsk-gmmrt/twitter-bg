@@ -1,4 +1,8 @@
-angular.module('twigbro.main', [])
+angular.module('twigbro.main', [
+  'ngRoute',
+  'twigbro.mapView',
+  'twigbro.statView'
+])
 
 .service('twigBroAPIService', function($http){
   this.profile = {
