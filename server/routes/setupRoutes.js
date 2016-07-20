@@ -22,15 +22,17 @@ module.exports = function(app) {
 
   app.get(config.apiEndpointPrefix + '/streamtweets',
   function(req, res) {
-    var tweets = [];
+    var tweets = {};
     var client = new Twitter(twitterKeys);
     var stream = client.stream('statuses/filter', {locations: '-180.0,0.0,0.0,90.0'});
     var bWrite = true;
     stream.on('data', function(tweet) {
-      tweets.push(tweetUtils.filterTweetFields(tweet));
-      console.log(tweets.length);
+      if (!tweet.created_at)
+        return;
+      tweets[(new Date(tweet.created_at)).toISOString() + tweet.id_str] = tweetUtils.filterTweetFields(tweet);
+      console.log(Object.keys(tweets).length);
       //console.log(tweet);
-      if (tweets.length >= 1000) {
+      if (Object.keys(tweets).length >= 1000) {
         if (bWrite){
         fs.writeFile(__dirname + '/stream.json', JSON.stringify(tweets), function (err,data) {
           if (err) {

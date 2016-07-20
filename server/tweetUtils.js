@@ -91,6 +91,6 @@ module.exports = {
         return retVal;
     },
     tweetsStub: function(count) {
-        return sampleTweets.slice(0, Math.min(count, sampleTweets.length));
+        return sampleTweets;
     }
 };
