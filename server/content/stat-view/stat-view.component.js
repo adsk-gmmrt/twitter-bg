@@ -21,7 +21,8 @@ angular.
               region: 'US',
               displayMode: 'markers',
               colorAxis: { colors: ['blue', 'red'] },
-              backgroundColor: '#81d4fa'
+              backgroundColor: '#81d4fa',
+              sizeAxis: { minValue: 0, maxValue: 100 }
             }
             // , formatters: {
             //   number: [{
