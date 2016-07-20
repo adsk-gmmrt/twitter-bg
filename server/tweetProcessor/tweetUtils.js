@@ -95,29 +95,6 @@ module.exports = {
         return sampleTweets;
     },
     cityRange2: 0.36,
-    /*statisticTwoWord: {},
-    statisticTwoWord.prototype.initializeObject= function(){
-        for(var city in citiesData){
-            statObject[city] = [0,0];
-        }
-    }*/
-
-  statisticTwoWordAnalize : function(tweets, words){
-  if(!Array.isArray(words) || words.length != 2)
-  {
-    console.log('Invalid words for 2D statistic')
-    return;
-  }
-   for(var i=0; i < tweets.length; i++)
-   {
-     wordsInCity = wordsInCity(tweets[i],words);
-     for(var i=0; i < 2; i++ ){
-       if(wordsInCity[i].length>0){
-         statObject[wordsInCity[i]][i] = statObject[wordsInCity[i]][i] + 1;
-       }
-     }
-   }
- },
 
  wordsInCity:function(tweet, words){
   var ret = wordsInTweets(tweet, words);
@@ -161,10 +138,11 @@ tweetInCity: function (tweet) {
     for(var city in citiesData){
       if (locationInCity (tweetLocation, citiesData[city])){
         ret = citiesData[city].city;
-        break;
+        return ret;
       };
     };
   }
+  return ret;
 },
 wordsInTweets:function(tweet,words){
   if(Array.isArray(words))
