@@ -6,7 +6,7 @@ var twitterKeys = require('../auth/twitterKeys');
 module.exports = function(app) {
 
   // get SPA application html
-  app.get('/'
+  app.get('/',
     function(req, res) {
       res.sendFile(config.contentDir + '/index.html');
   });
