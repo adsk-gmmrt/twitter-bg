@@ -2,7 +2,7 @@ var express = require('express');
 var session = require('express-session');
 var config = require('./config');
 
-console.log(require('./tweetProcessor/setupStreamingThread')());
+//console.log(require('./tweetProcessor/setupStreamingThread')());
 
 var app = new express();
 
