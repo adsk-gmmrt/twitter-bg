@@ -92,5 +92,93 @@ module.exports = {
     },
     tweetsStub: function(count) {
         return sampleTweets;
+    },
+    cityRange: 0.6,
+    cityRange2:cityRange * cityRange,
+    cities:citiesData,
+    /*statisticTwoWord: {},
+    statisticTwoWord.prototype.initializeObject= function(){
+        for(var city in cities){
+            statObject[city] = [0,0];
+        }
+    }*/
+
+  statisticTwoWordAnalize : function(tweets, words){
+  if(!Array.isArray(words) || words.length != 2)
+  {
+    console.log('Invalid words for 2D statistic')
+    return;
+  }
+   for(var i=0; i < tweets.length; i++)
+   {
+     wordsInCity = wordsInCity(tweets[i],words);
+     for(var i=0; i < 2; i++ ){
+       if(wordsInCity[i].length>0){
+         statObject[wordsInCity[i]][i] = statObject[wordsInCity[i]][i] + 1;
+       }
+     }
+   }
+ },
+
+ wordsInCity:function(tweet, words){
+  var ret = wordsInTweets(tweet, words);
+  var city =  tweetInCity(tweet);
+  if(Array.isArray(ret))
+  {
+    for (var i = 0; i < ret.length; i++) {
+      ret[i] = ret[i] ? city : ret;
     }
+  }
+},
+
+locationInRange:function (location, locationBox) {
+  //  2 ___ 1
+  //  |     |
+  //  3 ___ 0
+  if (location[1] >= locationMin[3][1])
+    if (location[1] <= locationMax[1][1])
+      if (location[0] >= locationBox[3][0])
+        if (location[0] <= locationMax[1][0])
+          return true;
+  return false;
+},
+ 
+locationInCity: function (location, locationCity) {
+  var dLongitude = location[0] - locationCity.longitude;
+  var dLatitude = location[1] - locationCity.latitude;
+
+  return (dLatitude * dLatitude + dLongitude * dLongitude < cityRange2) ? true : false;
+},
+
+
+tweetInCity: function (tweet) {
+  var ret = '';
+  if(tweet.place && tweet.place.place_type === "city" && 
+     tweet.place.name && tweet.place.name.length>0){
+    return !!cities[name];
+  }else{
+    var tweetLocation =[];
+    tweetLocation = tweet.coordinates.coordinates;
+    for(var city in cities){
+      if (locationInCity (tweetLocation, cities[city])){
+        ret = cities[city].city;
+        break;
+      };
+    };
+  }
+},
+wordsInTweets:function(tweet,words){
+  if(Array.isArray(words))
+  {
+    var ret = [];
+    for(var i=0; i < words.length; i++ )
+    {
+      ret.push( tweet.text.indexOf(words[i])<0 );
+    }
+  } 
+  else{
+    return( tweet.text.indexOf(words)<0 );
+  }
+}
+
 };
