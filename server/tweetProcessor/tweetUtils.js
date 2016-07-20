@@ -1,4 +1,5 @@
 var fs = require('fs');
+var citiesData = require('../data/citiesData');
 
 var tweetSchema = {
     "created_at": "Wed Jul 20 10:08:38 +0000 2016",
@@ -47,7 +48,7 @@ var tweetSchema = {
     "lang": "ar"
 };
 
-var sampleTweets = JSON.parse(fs.readFileSync(__dirname + '/data/stream.json', 'utf8'));
+var sampleTweets = JSON.parse(fs.readFileSync(__dirname + '/../data/stream.json', 'utf8'));
 
 var filterObjectFields = function(obj, pattern) {
     if (obj === null || obj === undefined) {
@@ -93,12 +94,10 @@ module.exports = {
     tweetsStub: function(count) {
         return sampleTweets;
     },
-    cityRange: 0.6,
-    cityRange2:cityRange * cityRange,
-    cities:citiesData,
+    cityRange2: 0.36,
     /*statisticTwoWord: {},
     statisticTwoWord.prototype.initializeObject= function(){
-        for(var city in cities){
+        for(var city in citiesData){
             statObject[city] = [0,0];
         }
     }*/
@@ -155,13 +154,13 @@ tweetInCity: function (tweet) {
   var ret = '';
   if(tweet.place && tweet.place.place_type === "city" && 
      tweet.place.name && tweet.place.name.length>0){
-    return !!cities[name];
+    return !!citiesData[name];
   }else{
     var tweetLocation =[];
     tweetLocation = tweet.coordinates.coordinates;
-    for(var city in cities){
-      if (locationInCity (tweetLocation, cities[city])){
-        ret = cities[city].city;
+    for(var city in citiesData){
+      if (locationInCity (tweetLocation, citiesData[city])){
+        ret = citiesData[city].city;
         break;
       };
     };

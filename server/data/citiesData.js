@@ -1,4 +1,4 @@
-var citiesData = [{
+module.exports = [{
   "New York": {
     "rank": 1,
     "city": "New York",
