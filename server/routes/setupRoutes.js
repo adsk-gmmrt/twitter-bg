@@ -6,18 +6,18 @@ var twitterKeys = require('../auth/twitterKeys');
 module.exports = function(app) {
 
   // get SPA application html
-  app.get('/', checkAuth,
+  app.get('/'
     function(req, res) {
       res.sendFile(config.contentDir + '/index.html');
   });
 
   // api routes
-  app.get(config.apiEndpointPrefix + '/userprofile', checkAuth,
+  app.get(config.apiEndpointPrefix + '/userprofile',
     function(req, res) {
       res.json(req.user.profile);
     });
 
-  app.get(config.apiEndpointPrefix + '/usertweets', checkAuth,
+  app.get(config.apiEndpointPrefix + '/usertweets',
     function(req, res) {
       request.get({
         url: 'https://api.twitter.com/1.1/statuses/user_timeline.json',
@@ -35,7 +35,7 @@ module.exports = function(app) {
       });
     });
 
-  app.get(config.apiEndpointPrefix + '/userfollows', checkAuth,
+  app.get(config.apiEndpointPrefix + '/userfollows',
     function(req, res) {
       res.json('@TODO');
     });
