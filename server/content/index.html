@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/app.css">
+    <script src="lib/angular/angular.js"></script>
+    <script src="app.js"></script>
+  </head>
+  <body ng-app="twigbro.main">
+    <div>
+      <nav ng-controller="twigbroNavController">
+        <span class="nav-title">Twitter's big bro</span>
+        <a class="nav-toright" href="/signout">Sign out</a>
+        <span class="nav-toright">{{api.getProfile().userName}}</span>
+        <img class="nav-toright" src="{{api.getProfile().photoHref}}"></img>
+      </nav>
+      <section ng-controller="twigbroTweetsController">
+        <div class="tweet" ng-repeat="tweet in api.getTweets()">
+          <div  class="tweet-header">
+            <span class="tweet-screen">@{{tweet.user.screen_name}}</span>
+            <span class="tweet-date">Created at: {{tweet.created_at}}</span>
+          </div>
+          <div class="tweet-content">
+            <span>{{tweet.text}}</span>
+          </div>
+        </div>
+      </section>
+    </div>    
+  </body>
+</html>

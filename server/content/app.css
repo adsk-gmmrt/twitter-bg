@@ -1,0 +1,38 @@
+
+nav {
+  min-height: 48px;
+  line-height: 48px;
+}
+
+.nav-title {
+  font-size: 26px;
+  line-height: 60px;
+}
+
+.nav-toright {
+  float: right;
+  padding: 10px;
+}
+
+.tweet {
+  background-color: lightgrey;
+  padding: 10px;
+  margin: 10px;
+}
+
+.tweet-screen {
+  color: blue;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.tweet-date {
+  margin-left:20px;
+  font-size: 12px;
+  color: grey;
+}
+
+.tweet-content {
+  padding-top:20px;
+  padding-bottom:10px;
+}

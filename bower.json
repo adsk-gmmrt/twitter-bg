@@ -1,0 +1,27 @@
+{
+  "name": "twig-bro",
+  "description": "Your simple neighborhood twitter spy",
+  "main": "client/app.js",
+  "authors": [
+    "Maciej Sapun"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "Twitter",
+    "Big",
+    "Brother"
+  ],
+  "homepage": "https://github.com/sapunm/2016-06-Final-Assessment",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.7"
+  }
+}
