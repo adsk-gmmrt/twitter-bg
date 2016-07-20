@@ -1,6 +1,6 @@
 var checkAuth = require('../auth/checkAuth');
 var config = require('../config');
-var tweetUtils = require('../tweetUtils');
+var tweetUtils = require('../tweetProcessor/tweetUtils');
 var request = require('request');
 var twitterKeys = require('../auth/twitterKeys');
 var Twitter = require('twitter');
