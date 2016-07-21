@@ -4,13 +4,25 @@ var twitterKeys = require('../auth/twitterKeys');
 var Twitter = require('twitter');
 
 var StreamingThread = function(locations) {
-  this.locations = locations || '-180.0,-90.0,180.0,90.0'; 
+  this.locations = locations || '-180.0,-90.0,180.0,90.0'; // NY'-74.0,40.0,-73.0,41.0'; 
   this.seenTweets = 0;  
   this.client = new Twitter(twitterKeys);
   this.filters = {};
   this.filterKeys = [];
   this.createStream(); 
+  this.totalTweetCount = 0;
+  this.startTime = Date.now();
+  this.lostTweets = 0;
+  setInterval(this.logStatistic.bind(this), 10000);
 };
+StreamingThread.prototype.logStatistic = function(){
+  var time = (Date.now() - this.startTime)/1000;
+  var t2sek = parseInt(this.totalTweetCount/time);
+  var l2c = parseInt((this.seenTweets/this.totalTweetCount)*100);
+  console.log("After "+ time +' [sek] was ' + this.totalTweetCount +' tweets ( '+ t2sek + ' tweet/[sek] ) and ' + l2c + ' [%] with localization.' );
+  if(this.lostTweets>0)
+    console.log('We lost ' + this.lostTweets +' tweets');
+}
 
 StreamingThread.prototype.createStream = function() {
   this.stream = this.client.stream('statuses/filter', {locations: this.locations});
@@ -23,12 +35,20 @@ StreamingThread.prototype.createStream = function() {
 StreamingThread.prototype.onTweet = function(tweet) {
   if (this.isValidTweet(tweet)) {
     this.seenTweets++;
+    this.totalTweetCount++;
     var tweetExtract = tweetUtils.filterTweetFields(tweet);
     if (tweetExtract) {
       for (var i = 0; i < this.filterKeys.length; i++) {
         this.filters[this.filterKeys[i]].process(tweetExtract);
       }
     }
+  }
+  else{
+    if(tweet.limit){
+      this.lostTweets = tweet.limit.track;
+    }
+    this.totalTweetCount ++;
+    console.log('tweet ', JSON.stringify(tweet));
   }
 };
 
