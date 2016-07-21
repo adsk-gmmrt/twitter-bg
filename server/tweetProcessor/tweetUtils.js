@@ -146,7 +146,7 @@ tweetInCity: function (tweet) {
 },
 wordsInTweets:function(orgTweet,words){
   var isWord = false;
-  tweet = isWord.toLowerCase();
+  tweet = orgTweet.toLowerCase();
   if(Array.isArray(words))
   {
     var ret = {};
@@ -158,14 +158,21 @@ wordsInTweets:function(orgTweet,words){
         }
     }
     return ret; 
-  } 
-  else{
+  } else if(typeof words === 'object'){
+    for(var k in words){
+        isWord = tweet.text.indexOf(words[k]) < 0;
+        if(isWord){
+            ret[words[k]]= isWord;
+        }
+    }
+    return ret;
+  } else if (typeof words === 'string'){
     isWord = tweet.text.indexOf(words) < 0;
     if(isWord){
         return({ words: isWord });
     }
   }
   return undefined;
-}
+},
 
 };
