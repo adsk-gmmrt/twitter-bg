@@ -5,12 +5,14 @@ var tweetUtils = require('./tweetUtils');
 
 var AggregateFilter = function() {
   this.words = {
-    'at' : 0,
-    'any': 0
+    'to' : 0,
+    'of': 0
   };
   this.result = {};
+  this.total = 0;
   for(var key in citiesData){
     this.result[key] = Object.assign({}, this.words);
+    this.result[key].location = citiesData[key].location;  
   };
 };
 
@@ -23,6 +25,7 @@ AggregateFilter.prototype.process = function(tweet) {
       var cityResult = this.result[kCity];
       if (cityResult) 
         this.result[kCity][kWord] += 1;
+        this.total += 1;
     }
   }
 }
