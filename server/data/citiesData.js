@@ -8,7 +8,7 @@ module.exports = [{
     "density": 10430,
     "location": {
       "latitude": 40.6643,
-      "longitude": 73.9385
+      "longitude": -73.9385
     }
   }
 }, {
@@ -21,7 +21,7 @@ module.exports = [{
     "density": 3124,
     "location": {
       "latitude": 34.0194,
-      "longitude": 118.4108
+      "longitude": -118.4108
     }
   }
 }, {
@@ -34,7 +34,7 @@ module.exports = [{
     "density": 4572,
     "location": {
       "latitude": 41.8376,
-      "longitude": 87.6818
+      "longitude": -87.6818
     }
   }
 }, {
@@ -47,7 +47,7 @@ module.exports = [{
     "density": 1352,
     "location": {
       "latitude": 29.7805,
-      "longitude": 95.3863
+      "longitude": -95.3863
     }
   }
 }, {
@@ -60,7 +60,7 @@ module.exports = [{
     "density": 4394,
     "location": {
       "latitude": 40.0094,
-      "longitude": 75.1333
+      "longitude": -75.1333
     }
   }
 }, {
@@ -73,7 +73,7 @@ module.exports = [{
     "density": 1080,
     "location": {
       "latitude": 33.5722,
-      "longitude": 112.088
+      "longitude": -112.088
     }
   }
 }, {
@@ -86,7 +86,7 @@ module.exports = [{
     "density": 1112,
     "location": {
       "latitude": 29.4724,
-      "longitude": 98.5251
+      "longitude": -98.5251
     }
   }
 }, {
@@ -99,7 +99,7 @@ module.exports = [{
     "density": 1552,
     "location": {
       "latitude": 32.8153,
-      "longitude": 117.135
+      "longitude": -117.135
     }
   }
 }, {
@@ -112,7 +112,7 @@ module.exports = [{
     "density": 1358,
     "location": {
       "latitude": 32.7757,
-      "longitude": 96.7967
+      "longitude": -96.7967
     }
   }
 }, {
@@ -125,7 +125,7 @@ module.exports = [{
     "density": 2069,
     "location": {
       "latitude": 37.2969,
-      "longitude": 121.8193
+      "longitude": -121.8193
     }
   }
 }, {
@@ -138,7 +138,7 @@ module.exports = [{
     "density": 1024,
     "location": {
       "latitude": 30.3072,
-      "longitude": 97.756
+      "longitude": -97.756
     }
   }
 }, {
@@ -151,7 +151,7 @@ module.exports = [{
     "density": 433,
     "location": {
       "latitude": 30.337,
-      "longitude": 81.6613
+      "longitude": -81.6613
     }
   }
 }, {
@@ -164,7 +164,7 @@ module.exports = [{
     "density": 6633,
     "location": {
       "latitude": 37.7751,
-      "longitude": 122.4193
+      "longitude": -122.4193
     }
   }
 }, {
@@ -177,7 +177,7 @@ module.exports = [{
     "density": 876,
     "location": {
       "latitude": 39.7767,
-      "longitude": 86.1459
+      "longitude": -86.1459
     }
   }
 }, {
@@ -190,7 +190,7 @@ module.exports = [{
     "density": 1399,
     "location": {
       "latitude": 39.9848,
-      "longitude": 82.985
+      "longitude": -82.985
     }
   }
 }, {
@@ -203,7 +203,7 @@ module.exports = [{
     "density": 842,
     "location": {
       "latitude": 32.7795,
-      "longitude": 97.3463
+      "longitude": -97.3463
     }
   }
 }, {
@@ -216,7 +216,7 @@ module.exports = [{
     "density": 949,
     "location": {
       "latitude": 35.2087,
-      "longitude": 80.8307
+      "longitude": -80.8307
     }
   }
 }, {
@@ -229,7 +229,7 @@ module.exports = [{
     "density": 2800,
     "location": {
       "latitude": 47.6205,
-      "longitude": 122.3509
+      "longitude": -122.3509
     }
   }
 }, {
@@ -242,7 +242,7 @@ module.exports = [{
     "density": 1515,
     "location": {
       "latitude": 39.7618,
-      "longitude": 104.8806
+      "longitude": -104.8806
     }
   }
 }, {
@@ -255,7 +255,7 @@ module.exports = [{
     "density": 982,
     "location": {
       "latitude": 31.8484,
-      "longitude": 106.427
+      "longitude": -106.427
     }
   }
 }, {
@@ -268,7 +268,7 @@ module.exports = [{
     "density": 1986,
     "location": {
       "latitude": 42.383,
-      "longitude": 83.1022
+      "longitude": -83.1022
     }
   }
 }, {
@@ -281,7 +281,7 @@ module.exports = [{
     "density": 3806,
     "location": {
       "latitude": 38.9041,
-      "longitude": 77.0171
+      "longitude": -77.0171
     }
   }
 }, {
@@ -294,7 +294,7 @@ module.exports = [{
     "density": 4939,
     "location": {
       "latitude": 42.332,
-      "longitude": 71.0202
+      "longitude": -71.0202
     }
   }
 }, {
@@ -307,7 +307,7 @@ module.exports = [{
     "density": 793,
     "location": {
       "latitude": 35.1035,
-      "longitude": 89.9785
+      "longitude": -89.9785
     }
   }
 }, {
@@ -320,7 +320,7 @@ module.exports = [{
     "density": 489,
     "location": {
       "latitude": 36.1718,
-      "longitude": 86.785
+      "longitude": -86.785
     }
   }
 }, {
@@ -333,7 +333,7 @@ module.exports = [{
     "density": 1689,
     "location": {
       "latitude": 45.537,
-      "longitude": 122.65
+      "longitude": -122.65
     }
   }
 }, {
@@ -346,7 +346,7 @@ module.exports = [{
     "density": 369,
     "location": {
       "latitude": 35.4671,
-      "longitude": 97.5137
+      "longitude": -97.5137
     }
   }
 }, {
@@ -359,7 +359,7 @@ module.exports = [{
     "density": 1660,
     "location": {
       "latitude": 36.2277,
-      "longitude": 115.264
+      "longitude": -115.264
     }
   }
 }, {
@@ -372,7 +372,7 @@ module.exports = [{
     "density": 2962,
     "location": {
       "latitude": 39.3002,
-      "longitude": 76.6105
+      "longitude": -76.6105
     }
   }
 }, {
@@ -385,7 +385,7 @@ module.exports = [{
     "density": 709,
     "location": {
       "latitude": 38.1781,
-      "longitude": 85.6667
+      "longitude": -85.6667
     }
   }
 }, {
@@ -398,7 +398,7 @@ module.exports = [{
     "density": 2389,
     "location": {
       "latitude": 43.0633,
-      "longitude": 87.9667
+      "longitude": -87.9667
     }
   }
 }, {
@@ -411,7 +411,7 @@ module.exports = [{
     "density": 1123,
     "location": {
       "latitude": 35.1056,
-      "longitude": 106.6474
+      "longitude": -106.6474
     }
   }
 }, {
@@ -424,7 +424,7 @@ module.exports = [{
     "density": 886,
     "location": {
       "latitude": 32.1543,
-      "longitude": 110.8711
+      "longitude": -110.8711
     }
   }
 }, {
@@ -437,7 +437,7 @@ module.exports = [{
     "density": 1706,
     "location": {
       "latitude": 36.7827,
-      "longitude": 119.7945
+      "longitude": -119.7945
     }
   }
 }, {
@@ -450,7 +450,7 @@ module.exports = [{
     "density": 1839,
     "location": {
       "latitude": 38.5666,
-      "longitude": 121.4686
+      "longitude": -121.4686
     }
   }
 }, {
@@ -463,7 +463,7 @@ module.exports = [{
     "density": 564,
     "location": {
       "latitude": 39.1252,
-      "longitude": 94.5511
+      "longitude": -94.5511
     }
   }
 }, {
@@ -476,7 +476,7 @@ module.exports = [{
     "density": 3549,
     "location": {
       "latitude": 33.8091,
-      "longitude": 118.1553
+      "longitude": -118.1553
     }
   }
 }, {
@@ -489,7 +489,7 @@ module.exports = [{
     "density": 1242,
     "location": {
       "latitude": 33.4019,
-      "longitude": 111.7174
+      "longitude": -111.7174
     }
   }
 }, {
@@ -502,7 +502,7 @@ module.exports = [{
     "density": 1218,
     "location": {
       "latitude": 33.7629,
-      "longitude": 84.4227
+      "longitude": -84.4227
     }
   }
 }, {
@@ -515,7 +515,7 @@ module.exports = [{
     "density": 826,
     "location": {
       "latitude": 38.8673,
-      "longitude": 104.7607
+      "longitude": -104.7607
     }
   }
 }, {
@@ -528,7 +528,7 @@ module.exports = [{
     "density": 679,
     "location": {
       "latitude": 36.7793,
-      "longitude": 76.024
+      "longitude": -76.024
     }
   }
 }, {
@@ -541,7 +541,7 @@ module.exports = [{
     "density": 1091,
     "location": {
       "latitude": 35.8302,
-      "longitude": 78.6414
+      "longitude": -78.6414
     }
   }
 }, {
@@ -554,7 +554,7 @@ module.exports = [{
     "density": 1242,
     "location": {
       "latitude": 41.2647,
-      "longitude": 96.0419
+      "longitude": -96.0419
     }
   }
 }, {
@@ -567,7 +567,7 @@ module.exports = [{
     "density": 4455,
     "location": {
       "latitude": 25.7752,
-      "longitude": 80.2086
+      "longitude": -80.2086
     }
   }
 }, {
@@ -580,7 +580,7 @@ module.exports = [{
     "density": 2704,
     "location": {
       "latitude": 37.7699,
-      "longitude": 122.2256
+      "longitude": -122.2256
     }
   }
 }, {
@@ -593,7 +593,7 @@ module.exports = [{
     "density": 2737,
     "location": {
       "latitude": 44.9633,
-      "longitude": 93.2683
+      "longitude": -93.2683
     }
   }
 }, {
@@ -606,7 +606,7 @@ module.exports = [{
     "density": 769,
     "location": {
       "latitude": 36.1279,
-      "longitude": 95.9023
+      "longitude": -95.9023
     }
   }
 }, {
@@ -619,7 +619,7 @@ module.exports = [{
     "density": 927,
     "location": {
       "latitude": 37.6907,
-      "longitude": 97.3427
+      "longitude": -97.3427
     }
   }
 }, {
@@ -632,7 +632,7 @@ module.exports = [{
     "density": 784,
     "location": {
       "latitude": 30.0686,
-      "longitude": 89.939
+      "longitude": -89.939
     }
   }
 }, {
@@ -645,7 +645,7 @@ module.exports = [{
     "density": 1472,
     "location": {
       "latitude": 32.7007,
-      "longitude": 97.1247
+      "longitude": -97.1247
     }
   }
 }];
