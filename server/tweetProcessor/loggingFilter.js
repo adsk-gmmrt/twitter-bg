@@ -11,7 +11,7 @@ LoggingFilter.prototype.process = function(tweet) {
     console.log(" ---- City: " + tweet.place.name);
   else
     console.log(" No place!!!!!");
-  console.log(" ---- Location: " + retVal.coordinates.coordinates); 
+  console.log(" ---- Location: " + tweet.coordinates.coordinates); 
 };
 
 LoggingFilter.prototype.getResult = function() {

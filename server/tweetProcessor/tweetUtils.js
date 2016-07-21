@@ -103,7 +103,9 @@ module.exports = {
   if(ret){
     var city =  this.tweetInCity(tweet);
     if(city){
-        return { city : ret};
+        var retObj = {}
+        retObj[city] = ret;
+        return retObj;
     }
    }
  return undefined;
@@ -134,15 +136,18 @@ tweetInCity: function (tweet) {
   var ret = '';
   if(tweet.place && tweet.place.place_type === "city" && 
      tweet.place.name && tweet.place.name.length>0){
-    return !!citiesData[tweet.place.name];
-  }else{
+    if (citiesData[tweet.place.name])
+      return true;
+  }
+  if (tweet.place.country_code === "US") {
     var tweetLocation = {
       longitude : tweet.coordinates.coordinates[0],
       latitude  : tweet.coordinates.coordinates[1]
     };
     for(var city in citiesData){
-      if (this.locationInCity (tweetLocation, citiesData[city])){
-        ret = citiesData[city].city;
+      var cityObj = citiesData[city];
+      if (this.locationInCity (tweetLocation, cityObj.location)){
+        ret = cityObj.city;
         return ret;
       };
     };
