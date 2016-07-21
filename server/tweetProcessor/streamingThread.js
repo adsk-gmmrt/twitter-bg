@@ -39,7 +39,7 @@ StreamingThread.prototype.onStreamError = function(error) {
 };
 
 StreamingThread.prototype.isValidTweet = function(tweet) {
-   return (!!tweet.created_at) && (!!tweet.text) && (!!tweet.id);
+   return (!!tweet.created_at) && (!!tweet.text) && (!!tweet.id_str);
 };
 
 StreamingThread.prototype.registerFilter = function(filterKey, filter) {
