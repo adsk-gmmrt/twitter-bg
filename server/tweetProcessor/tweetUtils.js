@@ -184,7 +184,6 @@ tweetInCity: function (tweet) {
     };
     for(var city in citiesData){
       var cityObj = citiesData[city];
-      var 
       if (this.locationInCity (tweetLocation, cityObj.location,this.cityRange(cityObj))){
         ret = cityObj.city;
         return ret;
