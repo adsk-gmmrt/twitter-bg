@@ -62,4 +62,4 @@ StreamingThread.prototype.getFilter = function(filterKey) {
   return this.filters[filterKey];
 };
 
-module.exports = new StreamingThread('-74.5,40.3,-74.0,40.9');
+module.exports = new StreamingThread();
