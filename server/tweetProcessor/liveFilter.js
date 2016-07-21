@@ -26,7 +26,7 @@ LiveFilter.prototype.process = function(tweet) {
     }
     if(isOk){
       this.tweets[(new Date(tweet.created_at)).toISOString() + tweet.id_str] = tweet;
-      if (this.count < limit) {
+      if (this.count < this.limit) {
         this.count++;
       } else {
         delete this.tweets[Object.keys(this.tweets)[0]];

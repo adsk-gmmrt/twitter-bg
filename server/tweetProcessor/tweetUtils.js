@@ -77,9 +77,7 @@ module.exports = {
                     0.0
                 ]
             };
-            if (tweet.geo) {
-                //@@TODO read from geo
-            } else if (tweet.place && tweet.place.bounding_box) {
+            if (tweet.place && tweet.place.bounding_box) {
                 var coords = tweet.place.bounding_box.coordinates;
                 for (var i = 0; i < coords.length; i++) {
                     retVal.coordinates.coordinates[0] += coords[i][0];
@@ -87,7 +85,9 @@ module.exports = {
                 }
                 retVal.coordinates.coordinates[0] /= coords.length;
                 retVal.coordinates.coordinates[1] /= coords.length;
-            }
+            } else if (tweet.geo) {
+                //@@TODO read from geo
+            };
         }
         return retVal;
     },
