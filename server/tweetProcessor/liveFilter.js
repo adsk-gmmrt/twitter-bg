@@ -1,6 +1,8 @@
 var tweetUtils = require('./tweetUtils');
 
-var LiveFilter = function(coordinates, words) {
+var LiveFilter = function(coordinates, words, limit) {
+    this.limit = limit || 100;
+    this.count = 0;
     this.coordinates = coordinates;
     this.tweets = {};
     this.words = words;
@@ -9,15 +11,20 @@ var LiveFilter = function(coordinates, words) {
 
 LiveFilter.prototype.process = function(tweet) {
     var isOk = !!tweet.created_at;
-    if(isOk && wordsAreSet){
-        isOk = !!tweetUtils.wordsInTweets(tweet , words);
+    if(isOk && this.wordsAreSet){
+        isOk = !!tweetUtils.wordsInTweets(tweet , this.words);
     }
     if(isOk){
        var tweetLocation = tweet.coordinates.coordinates;
-       isOk = tweetUtils.locationInRange(tweetLocation,coordinates);
+       isOk = tweetUtils.locationInRange(tweetLocation, this.coordinates);
     }
     if(isOk){
-      tweets[(new Date(tweet.created_at)).toISOString() + tweet.id_str] = tweetUtils.filterTweetFields(tweet);
+      this.tweets[(new Date(tweet.created_at)).toISOString() + tweet.id_str] = tweet;
+      if (this.count < limit) {
+        this.count++;
+      } else {
+        delete this.tweets[Object.keys(this.tweets)[0]];
+      }
     }
 }
 
