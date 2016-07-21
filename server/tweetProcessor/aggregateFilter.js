@@ -5,12 +5,12 @@ var tweetUtils = require('./tweetUtils');
 
 var AggregateFilter = function() {
   this.words = {
-    'a' : 0,
-    'e': 0
+    'at' : 0,
+    'any': 0
   };
   this.result = {};
   for(var key in citiesData){
-    this.result[key] = this.words;
+    this.result[key] = Object.assign({}, this.words);
   };
 };
 
