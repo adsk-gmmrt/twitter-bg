@@ -9,8 +9,10 @@ var AggregateFilter = function() {
     'any': 0
   };
   this.result = {};
+  this.total = 0;
   for(var key in citiesData){
     this.result[key] = Object.assign({}, this.words);
+    this.result[key].location = citiesData[key].location;  
   };
 };
 
@@ -23,6 +25,7 @@ AggregateFilter.prototype.process = function(tweet) {
       var cityResult = this.result[kCity];
       if (cityResult) 
         this.result[kCity][kWord] += 1;
+        this.total += 1;
     }
   }
 }
