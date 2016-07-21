@@ -40,19 +40,7 @@ StreamingThread.prototype.onStreamError = function(error) {
 
 StreamingThread.prototype.isValidTweet = function(tweet) {
   var isOK = (!!tweet.created_at) && (!!tweet.text) && (!!tweet.id_str);
-  if(isOK){
-    isOK = tweet.coordinates && Array.isArray(tweet.coordinates.coordinates);
-    isOK = isOK && tweet.coordinates.coordinates.length == 2;
-    isOK = isOK && (typeof tweet.coordinates.coordinates[0] === 'number');
-    if(!isOK){
-      isOK = tweet.geo && Array.isArray(tweet.geo.coordinates);
-      isOK = isOK && tweet.geo.coordinates.length == 2;
-      isOK = isOK && (typeof tweet.geo.coordinates[0] === 'number');     
-    }
-    if(!isOK){
-      isOK = tweet.place && tweet.place.bounding_box;
-      isOK = isOK && Array.isArray(tweet.place.bounding_box);
-    }
+  isOK = isOK && tweetUtils.hasLocalization(tweet);
   return isOK;
 };
 
