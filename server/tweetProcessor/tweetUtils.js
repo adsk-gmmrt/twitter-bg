@@ -128,8 +128,8 @@ module.exports = {
   var ret = this.wordsInTweets(tweet, words);
   if(ret){
     var city =  this.tweetInCity(tweet);
-    if(city){
-        var retObj = {}
+    if(city && city !== ''){
+        var retObj = {};
         retObj[city] = ret;
         return retObj;
     }
@@ -163,9 +163,9 @@ tweetInCity: function (tweet) {
   if(tweet.place && tweet.place.place_type === "city" && 
      tweet.place.name && tweet.place.name.length>0){
     if (citiesData[tweet.place.name])
-      return true;
+      return citiesData[tweet.place.name].city;
   }
-  if (tweet.place.country_code === "US") {
+  if (tweet.place && tweet.place.country_code === "US") {
     var tweetLocation = {
       longitude : tweet.coordinates.coordinates[0],
       latitude  : tweet.coordinates.coordinates[1]
