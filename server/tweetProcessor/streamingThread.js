@@ -41,7 +41,9 @@ StreamingThread.prototype.onStreamError = function(error) {
 };
 
 StreamingThread.prototype.isValidTweet = function(tweet) {
-   return (!!tweet.created_at) && (!!tweet.text) && (!!tweet.id_str);
+  var isOK = (!!tweet.created_at) && (!!tweet.text) && (!!tweet.id_str);
+  isOK = isOK && tweetUtils.hasLocalization(tweet);
+  return isOK;
 };
 
 StreamingThread.prototype.registerFilter = function(filterKey, filter) {

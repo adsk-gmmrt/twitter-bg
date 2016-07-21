@@ -11,7 +11,6 @@ var LiveFilter = function(coordinates, words, limit) {
     this.words = words;
     this.wordsAreSet = (words && Array.isArray(words) && words.length > 0);
 };
-
 LiveFilter.prototype.process = function(tweet) {
     var isOk = !!tweet.created_at;
     if(isOk && this.wordsAreSet){
@@ -26,16 +25,24 @@ LiveFilter.prototype.process = function(tweet) {
     }
     if(isOk){
       this.tweets[(new Date(tweet.created_at)).toISOString() + tweet.id_str] = tweet;
-      if (this.count < this.limit) {
-        this.count++;
-      } else {
-        delete this.tweets[Object.keys(this.tweets)[0]];
+      this.count++;
+      if (this.count > this.limit){
+      	for(var k in this.tweets){
+            delete this.tweets[k];
+            this.count--;
+            if(this.count < this.limit){
+                break;
+            }
+        }
       }
-    }
+   }
 }
 
 LiveFilter.prototype.getResult = function() {
     return this.tweets;
+}
+LiveFilter.prototype.setLimit= function(limit){
+    this.limit = limit;
 }
 
 module.exports = LiveFilter;

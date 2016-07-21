@@ -8,6 +8,13 @@ var tweetSchema = {
     "user": {
         "screen_name": "S_ALSULT3N"
     },
+    "geo": {
+        "type": "Point",
+        "coordinates": [
+            37.775,
+            -122.418
+        ]
+    },
     "coordinates": {
         "type": "Point",
         "coordinates": [
@@ -69,9 +76,7 @@ var filterObjectFields = function(obj, pattern) {
 module.exports = {
     filterTweetFields: function(tweet) {
         var retVal = filterObjectFields(tweet, tweetSchema);
-        if (!tweet.coordinates) {
-            if (1)
-              return undefined; // TODO - remove
+        if (!this.hasCoordinates(tweet)) {
             retVal.coordinates = {
                 "type": "Point",
                 "coordinates": [
@@ -79,7 +84,10 @@ module.exports = {
                     0.0
                 ]
             };
-            if (tweet.place && tweet.place.bounding_box) {
+            if (this.hasGeo(tweet)) {
+                retVal.coordinates.coordinates[0] = tweet.geo.coordinates[1];
+                retVal.coordinates.coordinates[1] = tweet.geo.coordinates[0];
+            } else if (this.hasPlace(tweet)) {
                 var coords = tweet.place.bounding_box.coordinates;
                 for (var i = 0; i < coords.length; i++) {
                     retVal.coordinates.coordinates[0] += coords[i][0];
@@ -87,14 +95,32 @@ module.exports = {
                 }
                 retVal.coordinates.coordinates[0] /= coords.length;
                 retVal.coordinates.coordinates[1] /= coords.length;
-            } else if (tweet.geo) {
-                //@@TODO read from geo
-            };
+            }
         }
          return retVal;
     },
     tweetsStub: function(count) {
         return sampleTweets;
+    },
+    hasCoordinates: function(tweet) {
+      var isOK = tweet.coordinates && Array.isArray(tweet.coordinates.coordinates);
+      isOK = isOK && tweet.coordinates.coordinates.length == 2;
+      isOK = isOK && (typeof tweet.coordinates.coordinates[0] === 'number');
+      return isOK;
+    },
+    hasGeo: function(tweet) {
+      var isOK = tweet.geo && Array.isArray(tweet.geo.coordinates);
+      isOK = isOK && tweet.geo.coordinates.length == 2;
+      isOK = isOK && (typeof tweet.geo.coordinates[0] === 'number');
+      return isOK;       
+    },
+    hasPlace: function(tweet) {
+      var isOK = tweet.place && tweet.place.bounding_box;
+      isOK = isOK && Array.isArray(tweet.place.bounding_box);
+      return isOK;
+    },
+    hasLocalization: function(tweet) {
+        return this.hasCoordinates(tweet) || this.hasGeo(tweet) || this.hasPlace(tweet);
     },
     cityRange2: 0.36,
 
