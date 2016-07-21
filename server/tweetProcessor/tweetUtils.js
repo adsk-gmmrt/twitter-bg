@@ -124,16 +124,17 @@ module.exports = {
     },
  
  cityRange: function(city){
-     if(!citiesData['cityRange']){
+     return 0.36;
+     if(!city['cityRange']){
          // A = pi*R^2
          // R = sqrt(A/pi)
-         var R = Math.sqrt(citiesData['area']/Math.PI);
+         var R = Math.sqrt(city.area/Math.PI);
          // R in deg => R/1.852/60 => R * 0.01
          R *= 0.01;
          R = R  * R;
-         citiesData['cityRange'] = R;
      }
-     return citiesData['cityRange'];
+     console.log('city.cityRange=',city.cityRange)
+     return city.cityRange;
  },
 
  wordsInCity:function(tweet, words){
@@ -163,6 +164,7 @@ locationInRange: function (location, locationMin, locationMax) {
 },
 
 locationInCity: function (location, locationCity, cityRange) {
+  //console.log('my log ',location,locationCity,cityRange)
   var dLongitude = location.longitude - locationCity.longitude;
   var dLatitude = location.latitude - locationCity.latitude;
 
