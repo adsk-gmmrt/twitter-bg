@@ -12,6 +12,9 @@ angular.
           template: '<map-view></map-view>'
         }).
         when('/stat', {
+          redirectTo: 'stat/clinton'
+        }).
+        when('/stat/:name', {
           template: '<stat-view></stat-view>'
         }).
         otherwise('/map');

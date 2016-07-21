@@ -5,8 +5,8 @@ var tweetUtils = require('./tweetUtils');
 
 var AggregateFilter = function() {
   this.words = {
-    'twitter' : 0,
-    'javascript': 0
+    'a' : 0,
+    'e': 0
   };
   this.result = {};
   for(var key in citiesData){
@@ -20,7 +20,9 @@ AggregateFilter.prototype.process = function(tweet) {
   var wordsInCity = tweetUtils.wordsInCity(tweet, this.words);
   for (var kCity in wordsInCity) {
     for (var kWord in wordsInCity[kCity]) {
-      this.result[kCity][kWord] += 1;
+      var cityResult = this.result[kCity];
+      if (cityResult) 
+        this.result[kCity][kWord] += 1;
     }
   }
 }

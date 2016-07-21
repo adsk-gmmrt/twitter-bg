@@ -4,7 +4,7 @@ var twitterKeys = require('../auth/twitterKeys');
 var Twitter = require('twitter');
 
 var StreamingThread = function(locations) {
-  this.locations = locations || '-180.0,-90.0,180.0,90.0';
+  this.locations = locations || '-180.0,-90.0,180.0,90.0'; 
   this.seenTweets = 0;  
   this.client = new Twitter(twitterKeys);
   this.filters = {};
@@ -24,8 +24,10 @@ StreamingThread.prototype.onTweet = function(tweet) {
   if (this.isValidTweet(tweet)) {
     this.seenTweets++;
     var tweetExtract = tweetUtils.filterTweetFields(tweet);
-    for (var i = 0; i < this.filterKeys.length; i++) {
-      this.filters[this.filterKeys[i]].process(tweetExtract);
+    if (tweetExtract) {
+      for (var i = 0; i < this.filterKeys.length; i++) {
+        this.filters[this.filterKeys[i]].process(tweetExtract);
+      }
     }
   }
 };

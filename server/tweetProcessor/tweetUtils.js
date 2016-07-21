@@ -97,7 +97,7 @@ module.exports = {
                 retVal.coordinates.coordinates[1] /= coords.length;
             }
         }
-        return retVal;
+         return retVal;
     },
     tweetsStub: function(count) {
         return sampleTweets;
@@ -128,8 +128,10 @@ module.exports = {
   var ret = this.wordsInTweets(tweet, words);
   if(ret){
     var city =  this.tweetInCity(tweet);
-    if(city){
-        return { city : ret};
+    if(city && city !== ''){
+        var retObj = {};
+        retObj[city] = ret;
+        return retObj;
     }
    }
  return undefined;
@@ -160,30 +162,33 @@ tweetInCity: function (tweet) {
   var ret = '';
   if(tweet.place && tweet.place.place_type === "city" && 
      tweet.place.name && tweet.place.name.length>0){
-    return !!citiesData[tweet.place.name];
-  }else{
+    if (citiesData[tweet.place.name])
+      return citiesData[tweet.place.name].city;
+  }
+  if (tweet.place && tweet.place.country_code === "US") {
     var tweetLocation = {
       longitude : tweet.coordinates.coordinates[0],
       latitude  : tweet.coordinates.coordinates[1]
     };
     for(var city in citiesData){
-      if (this.locationInCity (tweetLocation, citiesData[city])){
-        ret = citiesData[city].city;
+      var cityObj = citiesData[city];
+      if (this.locationInCity (tweetLocation, cityObj.location)){
+        ret = cityObj.city;
         return ret;
       };
     };
   }
   return ret;
 },
-wordsInTweets:function(orgTweet,words){
+wordsInTweets:function(tweet,words){
   var isWord = false;
-  tweet = orgTweet.toLowerCase();
+  var tweetText = tweet.text.toLowerCase();
+  var ret = {};
   if(Array.isArray(words))
   {
-    var ret = {};
     for(var i=0; i < words.length; i++ )
     {
-        isWord = tweet.text.indexOf(words[i]) < 0;
+        isWord = tweetText.indexOf(words[i]) >= 0;
         if(isWord){
             ret[words[i]]= isWord;
         }
@@ -191,14 +196,14 @@ wordsInTweets:function(orgTweet,words){
     return ret; 
   } else if(typeof words === 'object'){
     for(var k in words){
-        isWord = tweet.text.indexOf(words[k]) < 0;
+        isWord = tweetText.indexOf(k) >= 0;
         if(isWord){
-            ret[words[k]]= isWord;
+            ret[k]= isWord;
         }
     }
     return ret;
   } else if (typeof words === 'string'){
-    isWord = tweet.text.indexOf(words) < 0;
+    isWord = tweetText.indexOf(words) >= 0;
     if(isWord){
         return({ words: isWord });
     }
