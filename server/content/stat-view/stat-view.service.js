@@ -58,7 +58,7 @@ angular.module('twigbro.statView')
 
     var data = [];
 
-    for (var i = Math.floor(Math.random() * 10 + 1); i < cities.length; i += 5) {
+    for (var i = Math.floor(Math.random() * 10 + 1); i < cities.length; i += 10) {
       var totalVotes = Math.floor((Math.random() * 1000000) + 1);
       var clinton = Math.random();
       data.push([cities[i], clinton * totalVotes, (1 - clinton) * totalVotes]);
@@ -66,18 +66,31 @@ angular.module('twigbro.statView')
 
     var getVotes = function (name) {
 
+      var validName = name[0].toUpperCase() + name.slice(1);
+
+      var votesIdx = 0;
+      var votesHeader = 'Votes for ' + validName;
+
+      if (validName === 'Clinton') {
+        votesIdx = 1;
+      } else if (validName === 'Trump') {
+        votesIdx = 2;
+      }
+
       var output = [
         [
           'City',
-          name === "CLINTON" ? 'Votes for Clinton' : 'Votes for Trump',
+          votesHeader,
           'Total votes'
         ]
       ]
 
-      for (var i = 0; i < data.length; i++) {
-        var total = data[i][1] + data[i][2];
-        if (total > 0) {
-          output.push([data[i][0], data[i][name === "CLINTON" ? 1 : 2] / total, total])
+      if (votesIdx > 0) {
+        for (var i = 0; i < data.length; i++) {
+          var total = data[i][1] + data[i][2];
+          if (total > 0) {
+            output.push([data[i][0], data[i][votesIdx] / total, total])
+          }
         }
       }
 

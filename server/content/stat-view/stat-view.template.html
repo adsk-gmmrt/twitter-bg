@@ -1,1 +1,10 @@
- <div google-chart chart="{{$ctrl.chart}}" style="{{$ctrl.cssStyle}}"/>
+<div ng-show="{{$ctrl.hasData}}">
+  <div google-chart chart="{{$ctrl.chart}}" style="{{$ctrl.cssStyle}}"></div>
+</div>
+<div ng-hide="{{$ctrl.hasData}}">
+  <p>No data</p>
+</div>
+<div>
+  <a href="#!/stat/clinton">Clinton</a>
+  <a href="#!/stat/trump">Trump</a>
+</div>

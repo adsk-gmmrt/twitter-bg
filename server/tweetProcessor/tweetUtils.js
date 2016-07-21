@@ -8,6 +8,13 @@ var tweetSchema = {
     "user": {
         "screen_name": "S_ALSULT3N"
     },
+    "geo": {
+        "type": "Point",
+        "coordinates": [
+            37.775,
+            -122.418
+        ]
+    },
     "coordinates": {
         "type": "Point",
         "coordinates": [
@@ -69,7 +76,7 @@ var filterObjectFields = function(obj, pattern) {
 module.exports = {
     filterTweetFields: function(tweet) {
         var retVal = filterObjectFields(tweet, tweetSchema);
-        if (!tweet.coordinates) {
+        if (!this.hasCoordinates(tweet)) {
             retVal.coordinates = {
                 "type": "Point",
                 "coordinates": [
@@ -77,7 +84,10 @@ module.exports = {
                     0.0
                 ]
             };
-            if (tweet.place && tweet.place.bounding_box) {
+            if (this.hasGeo(tweet)) {
+                retVal.coordinates.coordinates[0] = tweet.geo.coordinates[1];
+                retVal.coordinates.coordinates[1] = tweet.geo.coordinates[0];
+            } else if (this.hasPlace(tweet)) {
                 var coords = tweet.place.bounding_box.coordinates;
                 for (var i = 0; i < coords.length; i++) {
                     retVal.coordinates.coordinates[0] += coords[i][0];
@@ -85,14 +95,32 @@ module.exports = {
                 }
                 retVal.coordinates.coordinates[0] /= coords.length;
                 retVal.coordinates.coordinates[1] /= coords.length;
-            } else if (tweet.geo) {
-                //@@TODO read from geo
-            };
+            }
         }
-        return retVal;
+         return retVal;
     },
     tweetsStub: function(count) {
         return sampleTweets;
+    },
+    hasCoordinates: function(tweet) {
+      var isOK = tweet.coordinates && Array.isArray(tweet.coordinates.coordinates);
+      isOK = isOK && tweet.coordinates.coordinates.length == 2;
+      isOK = isOK && (typeof tweet.coordinates.coordinates[0] === 'number');
+      return isOK;
+    },
+    hasGeo: function(tweet) {
+      var isOK = tweet.geo && Array.isArray(tweet.geo.coordinates);
+      isOK = isOK && tweet.geo.coordinates.length == 2;
+      isOK = isOK && (typeof tweet.geo.coordinates[0] === 'number');
+      return isOK;       
+    },
+    hasPlace: function(tweet) {
+      var isOK = tweet.place && tweet.place.bounding_box;
+      isOK = isOK && Array.isArray(tweet.place.bounding_box);
+      return isOK;
+    },
+    hasLocalization: function(tweet) {
+        return this.hasCoordinates(tweet) || this.hasGeo(tweet) || this.hasPlace(tweet);
     },
     cityRange2: 0.36,
 
@@ -100,8 +128,10 @@ module.exports = {
   var ret = this.wordsInTweets(tweet, words);
   if(ret){
     var city =  this.tweetInCity(tweet);
-    if(city){
-        return { city : ret};
+    if(city && city !== ''){
+        var retObj = {};
+        retObj[city] = ret;
+        return retObj;
     }
    }
  return undefined;
@@ -132,30 +162,33 @@ tweetInCity: function (tweet) {
   var ret = '';
   if(tweet.place && tweet.place.place_type === "city" && 
      tweet.place.name && tweet.place.name.length>0){
-    return !!citiesData[tweet.place.name];
-  }else{
+    if (citiesData[tweet.place.name])
+      return citiesData[tweet.place.name].city;
+  }
+  if (tweet.place && tweet.place.country_code === "US") {
     var tweetLocation = {
       longitude : tweet.coordinates.coordinates[0],
       latitude  : tweet.coordinates.coordinates[1]
     };
     for(var city in citiesData){
-      if (this.locationInCity (tweetLocation, citiesData[city])){
-        ret = citiesData[city].city;
+      var cityObj = citiesData[city];
+      if (this.locationInCity (tweetLocation, cityObj.location)){
+        ret = cityObj.city;
         return ret;
       };
     };
   }
   return ret;
 },
-wordsInTweets:function(orgTweet,words){
+wordsInTweets:function(tweet,words){
   var isWord = false;
-  tweet = orgTweet.toLowerCase();
+  var tweetText = tweet.text.toLowerCase();
+  var ret = {};
   if(Array.isArray(words))
   {
-    var ret = {};
     for(var i=0; i < words.length; i++ )
     {
-        isWord = tweet.text.indexOf(words[i]) < 0;
+        isWord = tweetText.indexOf(words[i]) >= 0;
         if(isWord){
             ret[words[i]]= isWord;
         }
@@ -163,14 +196,14 @@ wordsInTweets:function(orgTweet,words){
     return ret; 
   } else if(typeof words === 'object'){
     for(var k in words){
-        isWord = tweet.text.indexOf(words[k]) < 0;
+        isWord = tweetText.indexOf(k) >= 0;
         if(isWord){
-            ret[words[k]]= isWord;
+            ret[k]= isWord;
         }
     }
     return ret;
   } else if (typeof words === 'string'){
-    isWord = tweet.text.indexOf(words) < 0;
+    isWord = tweetText.indexOf(words) >= 0;
     if(isWord){
         return({ words: isWord });
     }
