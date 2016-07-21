@@ -6,8 +6,9 @@ angular.
     templateUrl: 'stat-view/stat-view.template.html',
     controller: ['$routeParams', 'StatService',
 
-      function StatViewController($routeParams, $StatService) {
+      function StatViewController($routeParams, StatService) {
 
+        
         // var API_KEY = "AIzaSyCYa7ZwoXJUYaApV9Xmz_mxWKfbtHEOjSM";
         var createChart = function () {
 
@@ -29,17 +30,27 @@ angular.
                 columnNum: 1,
                 pattern: "0%"
               }]
-            }
+            },
+            data: [
+              ['City', 'Clinton', 'Total'],
+              ['Boston', 0, 0]
+            ]
           }
 
           return chart;
         };
 
-        var chart = createChart();
-        chart.data = $StatService.getVotes($routeParams.name);
+        this.hasData = true;
+        this.chart = createChart();
 
-        this.hasData = chart.data.length > 1; 
-        this.chart = chart;
+
+        var self = this;
+        StatService.getVotes($routeParams.name).then(function (data) {
+          var chart = createChart();
+          chart.data = data;
+          self.hasData = chart.data.length > 1;
+          self.chart = chart;
+        });
       }
     ]
   });

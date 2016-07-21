@@ -1,104 +1,60 @@
 'use strict';
 
 angular.module('twigbro.statView')
-  .factory('StatService', function () {
+  .factory('StatService', ['$http',
 
-    var cities = [
-      "Montgomery",
-      "Juneau",
-      "Phoenix",
-      "Little Rock",
-      "Sacramento",
-      "Denver",
-      "Hartford",
-      "Dover",
-      "Tallahassee",
-      "Atlanta",
-      "Honolulu",
-      "Boise",
-      "Springfield",
-      "Indianapolis",
-      "Des Moines",
-      "Topeka",
-      "Frankfort",
-      "Baton Rouge",
-      "Augusta",
-      "Annapolis",
-      "Boston",
-      "Lansing",
-      "St. Paul",
-      "Jackson",
-      "Jefferson City",
-      "Helena",
-      "Lincoln",
-      "Carson City",
-      "Concord",
-      "Trenton",
-      "Santa Fe",
-      "Albany",
-      "Raleigh",
-      "Bismarck",
-      "Columbus",
-      "Oklahoma City",
-      "Salem",
-      "Harrisburg",
-      "Providence",
-      "Columbia",
-      "Pierre",
-      "Nashville",
-      "Austin",
-      "Salt Lake City",
-      "Montpelier",
-      "Richmond",
-      "Olympia",
-      "Charleston",
-      "Madison",
-      "Cheyenne"
-    ]
+    function ($http) {
 
-    var data = [];
+      var getVotes = function (name) {
 
-    for (var i = Math.floor(Math.random() * 10 + 1); i < cities.length; i += 10) {
-      var totalVotes = Math.floor((Math.random() * 1000000) + 1);
-      var clinton = Math.random();
-      data.push([cities[i], clinton * totalVotes, (1 - clinton) * totalVotes]);
-    }
+        return $http({
+          method: 'GET',
+          url: '/api/v1/aggregate'
+        }).then(function successCallback(response) {
 
-    var getVotes = function (name) {
+          var data = [];
+          var cityData = response.data;
 
-      var validName = name[0].toUpperCase() + name.slice(1);
+          var keyClinton = 'to';
+          var keyTrump = 'of';
 
-      var votesIdx = 0;
-      var votesHeader = 'Votes for ' + validName;
+          var validName = name[0].toUpperCase() + name.slice(1);
 
-      if (validName === 'Clinton') {
-        votesIdx = 1;
-      } else if (validName === 'Trump') {
-        votesIdx = 2;
-      }
+          var votesHeader = 'Votes for ' + validName;
+          var votesKey;
 
-      var output = [
-        [
-          'City',
-          votesHeader,
-          'Total votes'
-        ]
-      ]
+          var output = [
+            [
+              'City',
+              votesHeader,
+              'Total votes'
+            ]
+          ]
 
-      if (votesIdx > 0) {
-        for (var i = 0; i < data.length; i++) {
-          var total = data[i][1] + data[i][2];
-          if (total > 0) {
-            output.push([data[i][0], data[i][votesIdx] / total, total])
+          if (validName === 'Clinton') {
+            votesKey = keyClinton;
+          } else if (validName === 'Trump') {
+            votesKey = keyTrump;
           }
-        }
+
+          if (votesKey !== undefined) {
+            for (var city in cityData) {
+              var totalVotes = cityData[city][keyClinton] + cityData[city][keyTrump];
+              if (totalVotes > 0) {
+                output.push([city, cityData[city][votesKey] / totalVotes, totalVotes]);
+              }
+            }
+          }
+
+          return output;
+
+        }, function errorCallback(response) {
+          var r = response;
+        });
       }
 
-      return output;
-    }
+      return {
+        getVotes: getVotes,
+      }
 
-    return {
-      getVotes: getVotes,
-    }
-
-  });
+    }]);
