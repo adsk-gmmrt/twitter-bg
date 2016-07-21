@@ -17,12 +17,12 @@ var AggregateFilter = function() {
 AggregateFilter.KEY = 'aggregateFilter';
 
 AggregateFilter.prototype.process = function(tweet) {
-  var wordsInCity = tweetUtils.wordsInCity(tweet, this.words);
-  for (var kCity in wordsInCity) {
-    for (var kWord in wordsInCity[kCity]) {
-      this.result[kCity][kWord] += 1;
-    }
-  }
+  // var wordsInCity = tweetUtils.wordsInCity(tweet, this.words);
+  // for (var kCity in wordsInCity) {
+  //   for (var kWord in wordsInCity[kCity]) {
+  //     this.result[kCity][kWord] += 1;
+  //   }
+  // }
 }
 
 AggregateFilter.prototype.getResult = function() {

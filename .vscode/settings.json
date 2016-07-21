@@ -1,5 +1,6 @@
 // Place your settings in this file to overwrite default and user settings.
 {
     "editor.tabSize": 2,
-    "terminal.integrated.shell.windows": "c:\\Program Files\\Autodesk Git Bundle\\bin\\sh.exe"
+    "terminal.integrated.shell.windows": "c:\\Program Files\\Autodesk Git Bundle\\bin\\sh.exe",
+    "git.path": "C:\\Program Files\\Autodesk Git Bundle\\bin\\git.exe"
 }

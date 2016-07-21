@@ -4,9 +4,9 @@ angular.
   module('twigbro.statView').
   component('statView', {
     templateUrl: 'stat-view/stat-view.template.html',
-    controller: ['StatService',
+    controller: ['$routeParams', 'StatService', 
 
-      function StatViewController($StatService) {
+      function StatViewController($routeParams, $StatService) {
 
         // var API_KEY = "AIzaSyCYa7ZwoXJUYaApV9Xmz_mxWKfbtHEOjSM";
         var createChart = function () {
