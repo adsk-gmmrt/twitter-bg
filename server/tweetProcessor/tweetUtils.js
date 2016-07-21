@@ -77,9 +77,7 @@ module.exports = {
                     0.0
                 ]
             };
-            if (tweet.geo) {
-                //@@TODO read from geo
-            } else if (tweet.place && tweet.place.bounding_box) {
+            if (tweet.place && tweet.place.bounding_box) {
                 var coords = tweet.place.bounding_box.coordinates;
                 for (var i = 0; i < coords.length; i++) {
                     retVal.coordinates.coordinates[0] += coords[i][0];
@@ -87,7 +85,9 @@ module.exports = {
                 }
                 retVal.coordinates.coordinates[0] /= coords.length;
                 retVal.coordinates.coordinates[1] /= coords.length;
-            }
+            } else if (tweet.geo) {
+                //@@TODO read from geo
+            };
         }
         return retVal;
     },
@@ -97,33 +97,34 @@ module.exports = {
     cityRange2: 0.36,
 
  wordsInCity:function(tweet, words){
-  var ret = wordsInTweets(tweet, words);
-  var city =  tweetInCity(tweet);
-  if(Array.isArray(ret))
-  {
-    for (var i = 0; i < ret.length; i++) {
-      ret[i] = ret[i] ? city : ret;
+  var ret = this.wordsInTweets(tweet, words);
+  if(ret){
+    var city =  this.tweetInCity(tweet);
+    if(city){
+        return { city : ret};
     }
-  }
+   }
+ return undefined;
 },
 
-locationInRange:function (location, locationBox) {
-  //  2 ___ 1
-  //  |     |
-  //  3 ___ 0
-  if (location[1] >= locationMin[3][1])
-    if (location[1] <= locationMax[1][1])
-      if (location[0] >= locationBox[3][0])
-        if (location[0] <= locationMax[1][0])
+
+locationInRange: function (location, locationMin, locationMax) {
+  //            _____locationMax
+  //           |     |
+  //locationMin|_____|
+  if (location.latitude >= locationMin.latitude)
+    if (location.latitude <= locationMax.latitude)
+      if (location.longitude >= locationMin.longitude)
+        if (location.longitude <= locationMax.longitude)
           return true;
   return false;
 },
- 
-locationInCity: function (location, locationCity) {
-  var dLongitude = location[0] - locationCity.longitude;
-  var dLatitude = location[1] - locationCity.latitude;
 
-  return (dLatitude * dLatitude + dLongitude * dLongitude < cityRange2) ? true : false;
+locationInCity: function (location, locationCity) {
+  var dLongitude = location.longitude - locationCity.longitude;
+  var dLatitude = location.latitude - locationCity.latitude;
+
+  return (dLatitude * dLatitude + dLongitude * dLongitude < this.cityRange2) ? true : false;
 },
 
 
@@ -131,12 +132,14 @@ tweetInCity: function (tweet) {
   var ret = '';
   if(tweet.place && tweet.place.place_type === "city" && 
      tweet.place.name && tweet.place.name.length>0){
-    return !!citiesData[name];
+    return !!citiesData[tweet.place.name];
   }else{
-    var tweetLocation =[];
-    tweetLocation = tweet.coordinates.coordinates;
+    var tweetLocation = {
+      longitude : tweet.coordinates.coordinates[0],
+      latitude  : tweet.coordinates.coordinates[1]
+    };
     for(var city in citiesData){
-      if (locationInCity (tweetLocation, citiesData[city])){
+      if (this.locationInCity (tweetLocation, citiesData[city])){
         ret = citiesData[city].city;
         return ret;
       };
@@ -144,18 +147,35 @@ tweetInCity: function (tweet) {
   }
   return ret;
 },
-wordsInTweets:function(tweet,words){
+wordsInTweets:function(orgTweet,words){
+  var isWord = false;
+  tweet = orgTweet.toLowerCase();
   if(Array.isArray(words))
   {
-    var ret = [];
+    var ret = {};
     for(var i=0; i < words.length; i++ )
     {
-      ret.push( tweet.text.indexOf(words[i])<0 );
+        isWord = tweet.text.indexOf(words[i]) < 0;
+        if(isWord){
+            ret[words[i]]= isWord;
+        }
     }
-  } 
-  else{
-    return( tweet.text.indexOf(words)<0 );
+    return ret; 
+  } else if(typeof words === 'object'){
+    for(var k in words){
+        isWord = tweet.text.indexOf(words[k]) < 0;
+        if(isWord){
+            ret[words[k]]= isWord;
+        }
+    }
+    return ret;
+  } else if (typeof words === 'string'){
+    isWord = tweet.text.indexOf(words) < 0;
+    if(isWord){
+        return({ words: isWord });
+    }
   }
-}
+  return undefined;
+},
 
 };
