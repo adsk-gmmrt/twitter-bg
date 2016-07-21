@@ -70,6 +70,8 @@ module.exports = {
     filterTweetFields: function(tweet) {
         var retVal = filterObjectFields(tweet, tweetSchema);
         if (!tweet.coordinates) {
+            if (1)
+              return undefined; // TODO - remove
             retVal.coordinates = {
                 "type": "Point",
                 "coordinates": [
@@ -89,7 +91,7 @@ module.exports = {
                 //@@TODO read from geo
             };
         }
-        return retVal;
+         return retVal;
     },
     tweetsStub: function(count) {
         return sampleTweets;
@@ -147,15 +149,15 @@ tweetInCity: function (tweet) {
   }
   return ret;
 },
-wordsInTweets:function(orgTweet,words){
+wordsInTweets:function(tweet,words){
   var isWord = false;
-  tweet = orgTweet.toLowerCase();
+  var tweetText = tweet.text.toLowerCase();
+  var ret = {};
   if(Array.isArray(words))
   {
-    var ret = {};
     for(var i=0; i < words.length; i++ )
     {
-        isWord = tweet.text.indexOf(words[i]) < 0;
+        isWord = tweetText.indexOf(words[i]) >= 0;
         if(isWord){
             ret[words[i]]= isWord;
         }
@@ -163,14 +165,14 @@ wordsInTweets:function(orgTweet,words){
     return ret; 
   } else if(typeof words === 'object'){
     for(var k in words){
-        isWord = tweet.text.indexOf(words[k]) < 0;
+        isWord = tweetText.indexOf(k) >= 0;
         if(isWord){
-            ret[words[k]]= isWord;
+            ret[k]= isWord;
         }
     }
     return ret;
   } else if (typeof words === 'string'){
-    isWord = tweet.text.indexOf(words) < 0;
+    isWord = tweetText.indexOf(words) >= 0;
     if(isWord){
         return({ words: isWord });
     }
