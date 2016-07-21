@@ -8,6 +8,7 @@ var fs = require('fs');
 var streamingThread = require('../tweetProcessor/streamingThread');
 var AggregateFilter = require('../tweetProcessor/aggregateFilter');
 var LiveFilter = require('../tweetProcessor/liveFilter');
+var DevDummyFilter = require('../tweetProcessor/devDummyFilter');
 
 module.exports = function(app) {
 
@@ -20,9 +21,13 @@ module.exports = function(app) {
   // api routes
   app.get(config.apiEndpointPrefix + '/live/tweets',
     function(req, res) {
-      res.json(tweetUtils.tweetsStub(req.query.limit || 100));
+      //res.json(tweetUtils.tweetsStub(req.query.limit || 100));
       // var filter = streamingThread.getFilter(req.query.location
-      // res.json(streamingThread.getFilter(req.query.location, new LiveFilter());
+      var filter = streamingThread.getFilter(DevDummyFilter.KEY);
+      if (!filter) {
+        streamingThread.registerFilter(DevDummyFilter.KEY, filter = new DevDummyFilter(req.query.limit));
+      }
+      res.json(filter.getResult());
     });
 
   app.get(config.apiEndpointPrefix + '/aggregate',
