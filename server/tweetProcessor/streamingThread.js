@@ -4,13 +4,22 @@ var twitterKeys = require('../auth/twitterKeys');
 var Twitter = require('twitter');
 
 var StreamingThread = function(locations) {
-  this.locations = locations || '-180.0,-90.0,180.0,90.0'; 
+  this.locations = locations || '-180.0,-90.0,180.0,90.0'; // NY'-74.0,40.0,-73.0,41.0'; 
   this.seenTweets = 0;  
   this.client = new Twitter(twitterKeys);
   this.filters = {};
   this.filterKeys = [];
   this.createStream(); 
+  this.totalTweetCount = 0;
+  this.startTime = Date.now();
+  setInterval(this.logStatistic.bind(this), 10000);
 };
+StreamingThread.prototype.logStatistic = function(){
+  var time = (Date.now() - this.startTime)/1000;
+  var t2sek = parseInt(this.totalTweetCount/time);
+  var l2c = parseInt((this.seenTweets/this.totalTweetCount)*100);
+  console.log("After "+ time +' [sek] was ' + this.totalTweetCount +' tweets ( '+ t2sek + ' tweet/[sek] ) and ' + l2c + ' [%] with localization.' )
+}
 
 StreamingThread.prototype.createStream = function() {
   this.stream = this.client.stream('statuses/filter', {locations: this.locations});
@@ -21,6 +30,7 @@ StreamingThread.prototype.createStream = function() {
 };
 
 StreamingThread.prototype.onTweet = function(tweet) {
+  this.totalTweetCount ++;
   if (this.isValidTweet(tweet)) {
     this.seenTweets++;
     var tweetExtract = tweetUtils.filterTweetFields(tweet);
@@ -29,6 +39,9 @@ StreamingThread.prototype.onTweet = function(tweet) {
         this.filters[this.filterKeys[i]].process(tweetExtract);
       }
     }
+  }
+  else{
+    console.log('tweet ', JSON.stringify(tweet));
   }
 };
 

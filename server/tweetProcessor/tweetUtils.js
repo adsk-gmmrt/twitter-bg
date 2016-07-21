@@ -88,7 +88,7 @@ module.exports = {
                 retVal.coordinates.coordinates[0] = tweet.geo.coordinates[1];
                 retVal.coordinates.coordinates[1] = tweet.geo.coordinates[0];
             } else if (this.hasPlace(tweet)) {
-                var coords = tweet.place.bounding_box.coordinates;
+                var coords = tweet.place.bounding_box.coordinates[0];
                 for (var i = 0; i < coords.length; i++) {
                     retVal.coordinates.coordinates[0] += coords[i][0];
                     retVal.coordinates.coordinates[1] += coords[i][1];
@@ -116,7 +116,8 @@ module.exports = {
     },
     hasPlace: function(tweet) {
       var isOK = tweet.place && tweet.place.bounding_box;
-      isOK = isOK && Array.isArray(tweet.place.bounding_box);
+      isOK = isOK && Array.isArray(tweet.place.bounding_box.coordinates);
+      isOK = isOK && Array.isArray(tweet.place.bounding_box.coordinates[0]);
       return isOK;
     },
     hasLocalization: function(tweet) {
