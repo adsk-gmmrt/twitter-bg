@@ -36,7 +36,7 @@ angular.
         };
 
         var chart = createChart();
-        chart.data = $StatService.getData();
+        chart.data = $StatService.getVotes('CLINTON');
 
         this.chart = chart;
       }
