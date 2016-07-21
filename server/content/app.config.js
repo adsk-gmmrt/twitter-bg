@@ -9,7 +9,7 @@ angular.
 
       $routeProvider.
         when('/map', {
-          template: '<map-view></map-view>'
+          templateUrl: 'map-view/map-view.template.html'
         }).
         when('/stat', {
           redirectTo: 'stat/clinton'
