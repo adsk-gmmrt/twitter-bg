@@ -108,7 +108,7 @@ module.exports = {
 },
 
 
-locationInRange = function (location, locationMin, locationMax) {
+locationInRange: function (location, locationMin, locationMax) {
   //            _____locationMax
   //           |     |
   //locationMin|_____|
