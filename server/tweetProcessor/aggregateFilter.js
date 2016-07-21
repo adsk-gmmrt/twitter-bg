@@ -5,8 +5,8 @@ var tweetUtils = require('./tweetUtils');
 
 var AggregateFilter = function() {
   this.words = {
-    'at' : 0,
-    'any': 0
+    'to' : 0,
+    'of': 0
   };
   this.result = {};
   for(var key in citiesData){
