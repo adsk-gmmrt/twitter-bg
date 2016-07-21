@@ -4,7 +4,7 @@ angular.module('twigbro.mapView', [])
 .factory('MapViewState', function($window, $http){
 	//-------------------------------------------
     // Configuration
-	var markerBufferSize = 100;         // max number of displayed tweets
+	var markerBufferSize = 300;         // max number of displayed tweets
 	var readTweetsLimit = 50;          // one GET request limit
 	var readTweetsInterval = 1000;      // miliseconds
     var checkTweetsAgeInterval = 2000;  // miliseconds
