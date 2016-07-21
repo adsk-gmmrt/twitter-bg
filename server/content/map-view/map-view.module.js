@@ -2,9 +2,18 @@
 
 angular.module('twigbro.mapView', [])
 .factory('MapViewState', function($window, $http){
-	var tweets = {};
-	var markerBufferSize = 4000;
-	var readTweetsLimit = 200;
+	//-------------------------------------------
+    // Configuration
+	var markerBufferSize = 500;         // max number of displayed tweets
+	var readTweetsLimit = 200;          // one GET request limit
+	var readTweetsInterval = 1000;      // miliseconds
+    var checkTweetsAgeInterval = 5000;  // miliseconds
+
+    var ageArr = [10,20,30,40,60,80,100,120,180];  // in seconds (<10) age === 1, (<20)age === 2 etc.
+    //--------------------------------------------
+
+
+	var tweets = {}; // main tweets container
     var mapProp = {
       center : new google.maps.LatLng(50.1055, 19.8433),
       zoom : 5,
@@ -18,20 +27,20 @@ angular.module('twigbro.mapView', [])
 		for(var i = 0; i < num; i++){
 			var tweet = tweets[keyArr[i]];
 			if( tweet.marker){
-				marker.setMap(null);
+				tweet.marker.setMap(null);
 			}
 			delete tweets[keyArr[i]];
 		}
 	}
 
 	var readTweets = function(){
-		var latMinn = mapBounds.b.b;
-		var lngMin = mapBounds.b.f;
-		var latMax = mapBounds.f.b;
-		var lngMax = mapBounds.f.f;
+		var lngMin = Math.min(mapProp.mapBounds.b.b, mapProp.mapBounds.b.f);
+		var lngMax = Math.max(mapProp.mapBounds.b.b, mapProp.mapBounds.b.f);
+		var latMin = Math.min(mapProp.mapBounds.f.b, mapProp.mapBounds.f.f);
+		var latMax = Math.max(mapProp.mapBounds.f.b, mapProp.mapBounds.f.f);
 
         var url = 'api/v1/live/tweets?limit='+readTweetsLimit+'&location=';
-        url = url + latMin.toFixed(4)+','+lngMin.toFixed(4)+','+latMax.toFixed(4)+','+lngMax.toFixed(4);
+        url = url + lngMin.toFixed(4)+','+latMin.toFixed(4)+','+lngMax.toFixed(4)+','+latMax.toFixed(4);
 	    return $http({ method: 'GET', 
     	           url: url
     	}).then(function (resp) {
@@ -49,20 +58,15 @@ angular.module('twigbro.mapView', [])
 	return { 
       readTweets:readTweets,
       tweets:tweets,
-      mapProp:mapProp
+      mapProp:mapProp,
+      readTweetsInterval:readTweetsInterval,
+      checkTweetsAgeInterval:checkTweetsAgeInterval,
+      ageArr:ageArr 
     };
 })
 .controller('MapViewController', function ($scope, $document, $window, MapViewState) {
   // Your code here
-  $scope.indx = 0; 
-  $scope.markers = [];
   $scope.map = null; 
-
-  $scope.readTweetsInterval = 1000;
-  $scope.checkTweetsAgeInterval = 5000;
- 
-  // in seconds (<20) age === 1, (<40)age === 2 etc 
-  $scope.ageArr = [20,40,60,80,100,120,140,160,180];
 
 
   $scope.init = function(){
@@ -72,14 +76,14 @@ angular.module('twigbro.mapView', [])
     
 	$scope.initMarkers();
 
-    //setInterval( refreshMarkers, readTweetsInterval);
-    setInterval( $scope.setAgeToAll, $scope.checkTweetsAgeInterval);
+    $scope._refreshMarkerlId = setInterval( $scope.refreshMarkers, MapViewState.readTweetsInterval);
+    $scope._setAgeIntervalId = setInterval( $scope.setAgeToAll, MapViewState.checkTweetsAgeInterval);
+    $scope.lazyRefresh = $window._.debounce($scope.validateMarkers, 300);
   }
 
   $scope.onBoundsChanged = function(event){
     $scope.saveMapState();
-  	$scope.validateMarkers();
-
+    $scope.lazyRefresh();
   }
 
   $scope.onMapClick = function(event){  
@@ -97,7 +101,9 @@ angular.module('twigbro.mapView', [])
     var keys = Object.keys(MapViewState.tweets); 
     for(var i = 0; i < keys.length; i++){
     	var marker = MapViewState.tweets[keys[i]].marker;
-    	if( !mapBounds.contains(marker.getPosition()) ){
+    	var lat = marker.getPosition().lat();
+    	var lng = marker.getPosition().lng();
+    	if( !MapViewState.mapProp.mapBounds.contains(marker.getPosition()) ){
     		marker.setMap(null);
     		delete MapViewState.tweets[keys[i]];
     	}
@@ -111,8 +117,6 @@ angular.module('twigbro.mapView', [])
     	$window._.each(newTweetsKeys, function(key){
     		if(tweets[key]){
                 var marker = $scope.createMarker(tweets[key]);
-                marker.setMap($scope.map);
-                google.maps.event.addDomListener(marker, 'click', $scope.onMarkerClick);
     		}
     	});
 	})
@@ -129,8 +133,8 @@ angular.module('twigbro.mapView', [])
 
   $scope.getAge = function( nowDate, tweet){
   	var sec = (nowDate - tweet.date)/1000;
-  	for( var i = $scope.ageArr.length-1; i>=0; i-- ){
-  		if( sec > $scope.ageArr[i])
+  	for( var i = MapViewState.ageArr.length-1; i>=0; i-- ){
+  		if( sec > MapViewState.ageArr[i])
   			return i+2;
   	}
   	return 1;
@@ -150,20 +154,24 @@ angular.module('twigbro.mapView', [])
 
   $scope.createMarker = function(tweet){
   	tweet.date = new Date(tweet.created_at);
-    var marker = new google.maps.Marker({
+    tweet.marker = new google.maps.Marker({
         position: new google.maps.LatLng({
-          lat : tweet.coordinates.coordinates[0] || $scope.randomLat(),
-          lng : tweet.coordinates.coordinates[1] || $scope.randomLng()
+          lng : tweet.coordinates.coordinates[0] || $scope.randomLat(),
+          lat : tweet.coordinates.coordinates[1] || $scope.randomLng()
         }),
         text: tweet.text
       });
-    tweet.marker = marker;
+
     tweet.marker.setIcon( $scope.getIcon( $scope.getAge( new Date, tweet)));
-    return marker;
+    tweet.marker.setMap($scope.map);
+    google.maps.event.addDomListener(tweet.marker, 'click', $scope.onMarkerClick);
   }
 
   $scope.$on("$destroy", function handler() {
   	$scope.saveMapState();
+  	clearInterval( $scope._refreshMarkerlId);
+    clearInterval( $scope._setAgeIntervalId);
+
   	$window._.each(MapViewState.tweets, function(tweet){
   		tweet.marker.setMap(null);
     	delete tweet.marker;
