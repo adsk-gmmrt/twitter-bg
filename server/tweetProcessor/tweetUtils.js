@@ -8,6 +8,13 @@ var tweetSchema = {
     "user": {
         "screen_name": "S_ALSULT3N"
     },
+    "geo": {
+        "type": "Point",
+        "coordinates": [
+            37.775,
+            -122.418
+        ]
+    },
     "coordinates": {
         "type": "Point",
         "coordinates": [
