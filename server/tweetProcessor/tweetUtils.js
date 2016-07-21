@@ -122,7 +122,20 @@ module.exports = {
     hasLocalization: function(tweet) {
         return this.hasCoordinates(tweet) || this.hasGeo(tweet) || this.hasPlace(tweet);
     },
-    cityRange2: 0.36,
+ 
+ cityRange: function(city){
+     return 0.36;
+    //  if(!city.cityRange){
+    //      // A = pi*R^2
+    //      // R = sqrt(A/pi)
+    //      var R = Math.sqrt(city.area/Math.PI);
+    //      // R in deg => R/1.852/60 => R * 0.01
+    //      R *= 0.01;
+    //      R = R  * R;
+    //      city.cityRange = R
+    //  }
+    //  return city.cityRange;
+ },
 
  wordsInCity:function(tweet, words){
   var ret = this.wordsInTweets(tweet, words);
@@ -150,11 +163,11 @@ locationInRange: function (location, locationMin, locationMax) {
   return false;
 },
 
-locationInCity: function (location, locationCity) {
+locationInCity: function (location, locationCity, cityRange) {
   var dLongitude = location.longitude - locationCity.longitude;
   var dLatitude = location.latitude - locationCity.latitude;
 
-  return (dLatitude * dLatitude + dLongitude * dLongitude < this.cityRange2) ? true : false;
+  return (dLatitude * dLatitude + dLongitude * dLongitude < cityRange) ? true : false;
 },
 
 
@@ -172,7 +185,7 @@ tweetInCity: function (tweet) {
     };
     for(var city in citiesData){
       var cityObj = citiesData[city];
-      if (this.locationInCity (tweetLocation, cityObj.location)){
+      if (this.locationInCity (tweetLocation, cityObj.location,this.cityRange(cityObj))){
         ret = cityObj.city;
         return ret;
       };
