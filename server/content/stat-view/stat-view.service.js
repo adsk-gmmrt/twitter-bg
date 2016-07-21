@@ -58,7 +58,7 @@ angular.module('twigbro.statView')
 
     var data = [];
 
-    for (var i = Math.floor(Math.random() * 10 + 1); i < cities.length; i += 5) {
+    for (var i = Math.floor(Math.random() * 10 + 1); i < cities.length; i += 10) {
       var totalVotes = Math.floor((Math.random() * 1000000) + 1);
       var clinton = Math.random();
       data.push([cities[i], clinton * totalVotes, (1 - clinton) * totalVotes]);
