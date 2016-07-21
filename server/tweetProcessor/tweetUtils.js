@@ -108,7 +108,7 @@ module.exports = {
 },
 
 
-locationInRange = function (location, locationMin, locationMax) {
+locationInRange: function (location, locationMin, locationMax) {
   //            _____locationMax
   //           |     |
   //locationMin|_____|
@@ -121,8 +121,8 @@ locationInRange = function (location, locationMin, locationMax) {
 },
 
 locationInCity: function (location, locationCity) {
-  var dLongitude = location[0] - locationCity.longitude;
-  var dLatitude = location[1] - locationCity.latitude;
+  var dLongitude = location.longitude - locationCity.longitude;
+  var dLatitude = location.latitude - locationCity.latitude;
 
   return (dLatitude * dLatitude + dLongitude * dLongitude < this.cityRange2) ? true : false;
 },
@@ -134,7 +134,10 @@ tweetInCity: function (tweet) {
      tweet.place.name && tweet.place.name.length>0){
     return !!citiesData[tweet.place.name];
   }else{
-    var tweetLocation = tweet.coordinates.coordinates;
+    var tweetLocation = {
+      longitude : tweet.coordinates.coordinates[0],
+      latitude  : tweet.coordinates.coordinates[1]
+    };
     for(var city in citiesData){
       if (this.locationInCity (tweetLocation, citiesData[city])){
         ret = citiesData[city].city;
