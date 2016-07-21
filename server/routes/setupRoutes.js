@@ -21,12 +21,13 @@ module.exports = function(app) {
   // api routes
   app.get(config.apiEndpointPrefix + '/live/tweets',
     function(req, res) {
-      //res.json(tweetUtils.tweetsStub(req.query.limit || 100));
-      // var filter = streamingThread.getFilter(req.query.location
-      var filter = streamingThread.getFilter(DevDummyFilter.KEY);
+      var location = req.query.location || '-180.0,-90.0,180.0,90.0';
+      var limit = req.query.limit || limit;
+      var filter = streamingThread.getFilter(LiveFilter.KEY);
       if (!filter) {
-        streamingThread.registerFilter(DevDummyFilter.KEY, filter = new DevDummyFilter(req.query.limit));
+        streamingThread.registerFilter(LiveFilter.KEY, filter = new LiveFilter(location));
       }
+      filter.reset(location, limit);
       res.json(filter.getResult());
     });
 
@@ -34,33 +35,4 @@ module.exports = function(app) {
     function(req, res) {
       res.json(streamingThread.getFilter(AggregateFilter.KEY).getResult());
     });
-
-  app.get(config.apiEndpointPrefix + '/streamtweets',
-  function(req, res) {
-    var tweets = {};
-    var client = new Twitter(twitterKeys);
-    var stream = client.stream('statuses/filter', {locations: '-180.0,0.0,0.0,90.0'});
-    var bWrite = true;
-    stream.on('data', function(tweet) {
-      if (!tweet.created_at)
-        return;
-      tweets[(new Date(tweet.created_at)).toISOString() + tweet.id_str] = tweetUtils.filterTweetFields(tweet);
-      console.log(Object.keys(tweets).length);
-      //console.log(tweet);
-      if (Object.keys(tweets).length >= 1000) {
-        if (bWrite){
-        fs.writeFile(__dirname + '/stream.json', JSON.stringify(tweets), function (err,data) {
-          if (err) {
-            console.log(err);
-          }
-        });
-      }
-      bWrite = false;          
-      }
-    });
-    stream.on('error', function(error) {
-      throw error;
-    });
-    stream = null;
-  });
 };
