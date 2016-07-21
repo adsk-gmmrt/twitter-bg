@@ -20,7 +20,9 @@ AggregateFilter.prototype.process = function(tweet) {
   var wordsInCity = tweetUtils.wordsInCity(tweet, this.words);
   for (var kCity in wordsInCity) {
     for (var kWord in wordsInCity[kCity]) {
-      this.result[kCity][kWord] += 1;
+      var cityResult = this.result[kCity];
+      if (cityResult) 
+        this.result[kCity][kWord] += 1;
     }
   }
 }
