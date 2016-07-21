@@ -140,7 +140,8 @@ angular.module('twigbro.mapView', [])
   	return 1;
   }
   $scope.getIcon = function(age) {
-  	return '/map-view/icons/tweet'+age+'.ico';
+  	//return '/map-view/icons/tweet'+age+'.ico';
+  	return '/map-view/icons/twitter'+age+'.png';
   }
 
   $scope.onMarkerClick = function(event){
