@@ -6,8 +6,8 @@ var filename = "./server/data/agregateFilter.json"
 
 var AggregateFilter = function() {
   this.words = {
-    'a' : 0,
-    'b': 0
+    'clinton' : 0,
+    'trump': 0
   };
   this.result = {};
   this.total = 0;
