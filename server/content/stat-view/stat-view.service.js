@@ -26,14 +26,18 @@ angular.module('twigbro.statView')
               pattern: "0%"
             }]
           },
-          data: [
-            ['latitude', 'longitude'],
-            [0, 0]
-          ]
+          data: getEmptyData()
         }
 
         return chart;
       };
+
+      var getEmptyData = function () {
+        return [
+          ['latitude', 'longitude'],
+          [0, 0]
+        ];
+      }
 
 
       var getVotes = function () {
@@ -50,12 +54,7 @@ angular.module('twigbro.statView')
           var keyTrump = 'trump';
 
           var output = [
-            [
-              'latitude',
-              'longitude',
-              'Votes for Clinton',
-              'Total votes'
-            ]
+            ['latitude', 'longitude', 'Votes for Clinton', 'Total votes'],
           ]
 
           var cities = [['City']];
@@ -67,6 +66,10 @@ angular.module('twigbro.statView')
               cities.push(cityname);
               output.push([city.location.latitude, city.location.longitude, city[keyClinton] / totalVotes, totalVotes]);
             }
+          }
+
+          if (cities.length === 1) {
+            output = getEmptyData();
           }
 
           return {
@@ -81,7 +84,7 @@ angular.module('twigbro.statView')
 
       return {
         createChart: createChart,
-        getVotes: getVotes
+        getVotes: getVotes,
       }
 
     }]);

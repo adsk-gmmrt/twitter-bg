@@ -5,8 +5,8 @@ var tweetUtils = require('./tweetUtils');
 
 var AggregateFilter = function() {
   this.words = {
-    'to' : 0,
-    'of': 0
+    'clinton' : 0,
+    'trump': 0
   };
   this.result = {};
   this.total = 0;
