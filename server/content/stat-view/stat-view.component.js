@@ -4,42 +4,42 @@ angular.
   module('twigbro.statView').
   component('statView', {
     templateUrl: 'stat-view/stat-view.template.html',
-    controller: ['$routeParams', 'StatService',
+    controller: ['StatService',
 
-      function StatViewController($routeParams, $StatService) {
+      function StatViewController(StatService) {
 
-        // var API_KEY = "AIzaSyCYa7ZwoXJUYaApV9Xmz_mxWKfbtHEOjSM";
-        var createChart = function () {
+        this.loadData = function () {
+          var self = this;
+          StatService.getVotes().then(function (result) {
+            self.chart.data = result.data;
+            self.cities = result.cities;
+          });
+        }
 
-          var chart = {
-            type: "GeoChart",
-            cssStyle: "width: 800px; height: 400px;",
-            options: {
-              width: 1000,
-              height: 700,
-              chartArea: { left: 10, top: 10, bottom: 0, width: "100%" },
-              legend: { numberFormat: "0%" },
-              region: 'US',
-              displayMode: 'markers',
-              colorAxis: { colors: ['blue', 'red'] },
-              backgroundColor: '#81d4fa',
-            },
-            formatters: {
-              number: [{
-                columnNum: 1,
-                pattern: "0%"
-              }]
-            }
+        this.getTotal = function (index) {
+          return this.chart.data[index][3];
+        }
+
+        this.getVotes = function (index, name) {
+          if (name === 'clinton') {
+            return (this.chart.data[index][2] * this.chart.data[index][3]).toFixed();
+          } else if (name === 'trump') {
+            return ((1 - this.chart.data[index][2]) * this.chart.data[index][3]).toFixed();
           }
+        }
 
-          return chart;
-        };
+        this.getPercent = function (index, name) {
+          if (name === 'clinton') {
+            return (this.chart.data[index][2] * 100).toFixed(1);
+          } else if (name === 'trump') {
+            return ((1 - this.chart.data[index][2]) * 100).toFixed(1);
+          }
+        }
 
-        var chart = createChart();
-        chart.data = $StatService.getVotes($routeParams.name);
+        this.chart = StatService.createChart();
+        this.cities = [];
+        this.loadData();
 
-        this.hasData = chart.data.length > 1; 
-        this.chart = chart;
       }
     ]
   });

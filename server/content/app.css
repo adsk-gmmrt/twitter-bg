@@ -37,6 +37,39 @@ nav {
   padding-bottom:10px;
 }
 
+.stat-table {
+  font-family: Verdana, Arial, sans-serif;
+  text-align: left;
+  width: 800px;
+}
+
+.stat-table-header {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.stat-table-header-name {
+  width: 160px;
+}
+
+.stat-table-header-percent {
+  width: 80px;
+}
+
+.stat-table-header-city {
+  text-align: left;
+}
+
+.stat-table-row {
+  font-size: 12px;
+  text-align: right;
+}
+
+.stat-table-row-city {
+  text-align: left;
+}
+
 
 html,
 body {

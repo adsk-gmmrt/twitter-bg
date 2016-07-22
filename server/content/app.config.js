@@ -12,9 +12,6 @@ angular.
           templateUrl: 'map-view/map-view.template.html'
         }).
         when('/stat', {
-          redirectTo: 'stat/clinton'
-        }).
-        when('/stat/:name', {
           template: '<stat-view></stat-view>'
         }).
         otherwise('/map');

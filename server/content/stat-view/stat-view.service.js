@@ -1,104 +1,90 @@
 'use strict';
 
 angular.module('twigbro.statView')
-  .factory('StatService', function () {
+  .factory('StatService', ['$http',
 
-    var cities = [
-      "Montgomery",
-      "Juneau",
-      "Phoenix",
-      "Little Rock",
-      "Sacramento",
-      "Denver",
-      "Hartford",
-      "Dover",
-      "Tallahassee",
-      "Atlanta",
-      "Honolulu",
-      "Boise",
-      "Springfield",
-      "Indianapolis",
-      "Des Moines",
-      "Topeka",
-      "Frankfort",
-      "Baton Rouge",
-      "Augusta",
-      "Annapolis",
-      "Boston",
-      "Lansing",
-      "St. Paul",
-      "Jackson",
-      "Jefferson City",
-      "Helena",
-      "Lincoln",
-      "Carson City",
-      "Concord",
-      "Trenton",
-      "Santa Fe",
-      "Albany",
-      "Raleigh",
-      "Bismarck",
-      "Columbus",
-      "Oklahoma City",
-      "Salem",
-      "Harrisburg",
-      "Providence",
-      "Columbia",
-      "Pierre",
-      "Nashville",
-      "Austin",
-      "Salt Lake City",
-      "Montpelier",
-      "Richmond",
-      "Olympia",
-      "Charleston",
-      "Madison",
-      "Cheyenne"
-    ]
+    function ($http) {
 
-    var data = [];
+      var createChart = function () {
 
-    for (var i = Math.floor(Math.random() * 10 + 1); i < cities.length; i += 10) {
-      var totalVotes = Math.floor((Math.random() * 1000000) + 1);
-      var clinton = Math.random();
-      data.push([cities[i], clinton * totalVotes, (1 - clinton) * totalVotes]);
-    }
-
-    var getVotes = function (name) {
-
-      var validName = name[0].toUpperCase() + name.slice(1);
-
-      var votesIdx = 0;
-      var votesHeader = 'Votes for ' + validName;
-
-      if (validName === 'Clinton') {
-        votesIdx = 1;
-      } else if (validName === 'Trump') {
-        votesIdx = 2;
-      }
-
-      var output = [
-        [
-          'City',
-          votesHeader,
-          'Total votes'
-        ]
-      ]
-
-      if (votesIdx > 0) {
-        for (var i = 0; i < data.length; i++) {
-          var total = data[i][1] + data[i][2];
-          if (total > 0) {
-            output.push([data[i][0], data[i][votesIdx] / total, total])
-          }
+        var chart = {
+          type: "GeoChart",
+          options: {
+            width: 800,
+            height: 400,
+            chartArea: { left: 10, top: 10, bottom: 10, right: 10, width: "100%" },
+            legend: 'none', // { numberFormat: "0%" },
+            region: 'US',
+            displayMode: 'markers',
+            colorAxis: { colors: ['red', 'blue'] },
+            backgroundColor: '#81d4fa',
+            sizeAxis: { maxSize: 25 }
+          },
+          formatters: {
+            number: [{
+              columnNum: 2,
+              pattern: "0%"
+            }]
+          },
+          data: getEmptyData()
         }
+
+        return chart;
+      };
+
+      var getEmptyData = function () {
+        return [
+          ['latitude', 'longitude'],
+          [0, 0]
+        ];
       }
 
-      return output;
-    }
 
-    return {
-      getVotes: getVotes,
-    }
+      var getVotes = function () {
 
-  });
+        return $http({
+          method: 'GET',
+          url: '/api/v1/aggregate'
+        }).then(function successCallback(response) {
+
+          var data = [];
+          var cityData = response.data;
+
+          var keyClinton = 'clinton';
+          var keyTrump = 'trump';
+
+          var output = [
+            ['latitude', 'longitude', 'Votes for Clinton', 'Total votes'],
+          ]
+
+          var cities = ['City'];
+
+          for (var cityname in cityData) {
+            var city = cityData[cityname];
+            var totalVotes = city[keyClinton] + city[keyTrump];
+            if (totalVotes > 0) {
+              cities.push(cityname);
+              output.push([city.location.latitude, city.location.longitude, city[keyClinton] / totalVotes, totalVotes]);
+            }
+          }
+
+          if (cities.length === 1) {
+            output = getEmptyData();
+          }
+
+          return {
+            "cities": cities,
+            "data": output
+          }
+
+        }, function errorCallback(response) {
+          var r = response;
+        });
+      }
+
+      return {
+        createChart: createChart,
+        getVotes: getVotes,
+      }
+
+    }]);

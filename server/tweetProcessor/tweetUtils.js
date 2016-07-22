@@ -52,6 +52,11 @@ var tweetSchema = {
             ]
         }
     },
+    entities: {
+        hashtags: [
+            { text: 'Hillary', indices: [14, 19] }
+        ]
+    },
     "lang": "ar"
 };
 
@@ -88,7 +93,7 @@ module.exports = {
                 retVal.coordinates.coordinates[0] = tweet.geo.coordinates[1];
                 retVal.coordinates.coordinates[1] = tweet.geo.coordinates[0];
             } else if (this.hasPlace(tweet)) {
-                var coords = tweet.place.bounding_box.coordinates;
+                var coords = tweet.place.bounding_box.coordinates[0];
                 for (var i = 0; i < coords.length; i++) {
                     retVal.coordinates.coordinates[0] += coords[i][0];
                     retVal.coordinates.coordinates[1] += coords[i][1];
@@ -116,25 +121,30 @@ module.exports = {
     },
     hasPlace: function(tweet) {
       var isOK = tweet.place && tweet.place.bounding_box;
-      isOK = isOK && Array.isArray(tweet.place.bounding_box);
+      isOK = isOK && Array.isArray(tweet.place.bounding_box.coordinates);
+      isOK = isOK && Array.isArray(tweet.place.bounding_box.coordinates[0]);
       return isOK;
     },
     hasLocalization: function(tweet) {
         return this.hasCoordinates(tweet) || this.hasGeo(tweet) || this.hasPlace(tweet);
     },
  
- cityRange: function(city){
+ cityRange2: function(city){
      return 0.36;
-     if(!city['cityRange']){
-         // A = pi*R^2
-         // R = sqrt(A/pi)
-         var R = Math.sqrt(city.area/Math.PI);
-         // R in deg => R/1.852/60 => R * 0.01
-         R *= 0.01;
-         R = R  * R;
-     }
-     console.log('city.cityRange=',city.cityRange)
-     return city.cityRange;
+    //  if(!city.cityRange){
+    //      // A = pi*R^2
+    //      // R = sqrt(A/pi)
+    //      var R = Math.sqrt(city.area/Math.PI);
+    //      // R in deg => R/1.852/60 => R * 0.01
+    //      R *= 0.01;
+    //      R = R  * R;
+    //      city.cityRange = R
+    //  }
+    //  return city.cityRange;
+ },
+
+ cityRange2Max: function(){
+     return 9.0;
  },
 
  wordsInCity:function(tweet, words){
@@ -163,12 +173,18 @@ locationInRange: function (location, locationMin, locationMax) {
   return false;
 },
 
-locationInCity: function (location, locationCity, cityRange) {
-  //console.log('my log ',location,locationCity,cityRange)
+locationInCity: function (location, locationCity, cityRange2) {
   var dLongitude = location.longitude - locationCity.longitude;
   var dLatitude = location.latitude - locationCity.latitude;
 
-  return (dLatitude * dLatitude + dLongitude * dLongitude < cityRange) ? true : false;
+  return (dLatitude * dLatitude + dLongitude * dLongitude < cityRange2) ? true : false;
+},
+
+locationDist2FromCity: function (location, locationCity) {
+  var dLongitude = location.longitude - locationCity.longitude;
+  var dLatitude = location.latitude - locationCity.latitude;
+
+  return dLatitude * dLatitude + dLongitude * dLongitude;
 },
 
 
@@ -184,12 +200,17 @@ tweetInCity: function (tweet) {
       longitude : tweet.coordinates.coordinates[0],
       latitude  : tweet.coordinates.coordinates[1]
     };
+    var d2, dmin2;
+
     for(var city in citiesData){
       var cityObj = citiesData[city];
-      if (this.locationInCity (tweetLocation, cityObj.location,this.cityRange(cityObj))){
-        ret = cityObj.city;
-        return ret;
-      };
+      d2 = this.locationDist2FromCity(tweetLocation, cityObj.location);
+      if (d2 < this.cityRange2Max()) {
+        if (dmin2 === undefined || dmin2 > d2) {
+            dmin2 = d2;
+            ret = cityObj.city;
+        }
+      }
     };
   }
   return ret;
