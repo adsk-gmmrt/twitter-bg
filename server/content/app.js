@@ -1,7 +1,8 @@
 angular.module('twigbro.main', [
   'ngRoute',
   'twigbro.mapView',
-  'twigbro.statView'
+  'twigbro.statView',
+  'ngtweet'
 ])
 
 .service('twigBroAPIService', function($http){
