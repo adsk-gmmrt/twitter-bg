@@ -52,6 +52,11 @@ var tweetSchema = {
             ]
         }
     },
+    entities: {
+        hashtags: [
+            { text: 'Hillary', indices: [14, 19] }
+        ]
+    },
     "lang": "ar"
 };
 

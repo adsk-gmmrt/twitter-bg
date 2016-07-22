@@ -48,7 +48,6 @@ AggregateFilter.prototype.log= function() {
 AggregateFilter.KEY = 'aggregateFilter';
 
 AggregateFilter.prototype.process = function(tweet) {
-  this.count++;
   var wordsInCity = tweetUtils.wordsInCity(tweet, this.words);
   for (var kCity in wordsInCity) {
     for (var kWord in wordsInCity[kCity]) {
