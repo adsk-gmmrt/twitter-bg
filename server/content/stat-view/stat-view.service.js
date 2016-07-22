@@ -9,16 +9,16 @@ angular.module('twigbro.statView')
 
         var chart = {
           type: "GeoChart",
-          cssStyle: "width: 800px; height: 400px;",
           options: {
-            width: 1000,
-            height: 700,
-            chartArea: { left: 10, top: 10, bottom: 0, width: "100%" },
-            legend: { numberFormat: "0%" },
+            width: 800,
+            height: 400,
+            chartArea: { left: 10, top: 10, bottom: 10, right: 10, width: "100%" },
+            legend: 'none', // { numberFormat: "0%" },
             region: 'US',
             displayMode: 'markers',
             colorAxis: { colors: ['red', 'blue'] },
-            backgroundColor: '#81d4fa',
+            backgroundColor: '#cce6ff',
+            sizeAxis: { maxSize: 25 }
           },
           formatters: {
             number: [{
@@ -57,7 +57,7 @@ angular.module('twigbro.statView')
             ['latitude', 'longitude', 'Votes for Clinton', 'Total votes'],
           ]
 
-          var cities = [['City']];
+          var cities = ['City'];
 
           for (var cityname in cityData) {
             var city = cityData[cityname];
