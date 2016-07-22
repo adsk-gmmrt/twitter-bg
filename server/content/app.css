@@ -41,20 +41,28 @@ nav {
   font-family: Verdana, Arial, sans-serif;
   text-align: left;
   width: 800px;
+  border: none;
+  padding: 0px;
 }
 
 .stat-table-header {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   text-align: right;
+  color: white;
+  background-color:#202060;
+}
+
+.stat-table-header th {
+  padding: 3px 10px 3px 10px;
 }
 
 .stat-table-header-name {
-  width: 160px;
+  width: 120px;
 }
 
 .stat-table-header-percent {
-  width: 80px;
+  width: 60px;
 }
 
 .stat-table-header-city {
@@ -64,6 +72,20 @@ nav {
 .stat-table-row {
   font-size: 12px;
   text-align: right;
+  
+}
+
+.stat-table-row:nth-child(odd) {
+    background-color: #efeff5;
+}
+
+.stat-table-row:nth-child(even) {
+    background-color: #e0e0eb;
+}
+
+.stat-table-row td{
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .stat-table-row-city {
