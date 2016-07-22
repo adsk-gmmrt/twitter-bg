@@ -1,7 +1,7 @@
 <div google-chart chart="{{$ctrl.chart}}" style="{{$ctrl.cssStyle}}"></div>
-<div ng-if="$ctrl.chart.data.length > 1">
+<div id='chartData' ng-if="$ctrl.chart.data.length > 1">
   <!--{{$ctrl.chart.data | json}}-->
-  <table class="stat-table">
+  <table id='chartTable' class="stat-table">
     <thead>
       <tr class="stat-table-header">
         <th class="stat-table-header-city">City</th>
