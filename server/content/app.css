@@ -36,3 +36,59 @@ nav {
   padding-top:20px;
   padding-bottom:10px;
 }
+
+
+html,
+body {
+    height: 100%; 
+    padding: 0;
+    margin: 0;
+}
+
+nav {
+    height:30px; 
+    border:solid 2px #aaa;
+    margin-bottom: 0px;
+}
+
+.navbar {
+    margin-bottom: 0px;
+ }
+
+section {
+    position:relative;
+    height: calc(100% - 50px);    
+}
+
+#map {
+  position:relative;
+  width:100%;
+  height:100%;
+  left:0px;
+  top: 0px;
+}
+
+#googleMap {
+  position:relative;
+  width:100%;
+  height:100%;
+  left:0px;
+  top: 0px;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+    border: 1px solid red;   
+    text-align: center;
+}
+
+#googleMap > div {   
+    position:relative;   
+}
+
+
+#googleMap > div > div {   
+    position:relative;   
+}
+
