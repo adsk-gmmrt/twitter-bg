@@ -52,6 +52,11 @@ var tweetSchema = {
             ]
         }
     },
+    entities: {
+        hashtags: [
+            { text: 'Hillary', indices: [14, 19] }
+        ]
+    },
     "lang": "ar"
 };
 
@@ -124,7 +129,7 @@ module.exports = {
         return this.hasCoordinates(tweet) || this.hasGeo(tweet) || this.hasPlace(tweet);
     },
  
- cityRange: function(city){
+ cityRange2: function(city){
      return 0.36;
     //  if(!city.cityRange){
     //      // A = pi*R^2
@@ -136,6 +141,10 @@ module.exports = {
     //      city.cityRange = R
     //  }
     //  return city.cityRange;
+ },
+
+ cityRange2Max: function(){
+     return 9.0;
  },
 
  wordsInCity:function(tweet, words){
@@ -164,11 +173,18 @@ locationInRange: function (location, locationMin, locationMax) {
   return false;
 },
 
-locationInCity: function (location, locationCity, cityRange) {
+locationInCity: function (location, locationCity, cityRange2) {
   var dLongitude = location.longitude - locationCity.longitude;
   var dLatitude = location.latitude - locationCity.latitude;
 
-  return (dLatitude * dLatitude + dLongitude * dLongitude < cityRange) ? true : false;
+  return (dLatitude * dLatitude + dLongitude * dLongitude < cityRange2) ? true : false;
+},
+
+locationDist2FromCity: function (location, locationCity) {
+  var dLongitude = location.longitude - locationCity.longitude;
+  var dLatitude = location.latitude - locationCity.latitude;
+
+  return dLatitude * dLatitude + dLongitude * dLongitude;
 },
 
 
@@ -184,12 +200,17 @@ tweetInCity: function (tweet) {
       longitude : tweet.coordinates.coordinates[0],
       latitude  : tweet.coordinates.coordinates[1]
     };
+    var d2, dmin2;
+
     for(var city in citiesData){
       var cityObj = citiesData[city];
-      if (this.locationInCity (tweetLocation, cityObj.location,this.cityRange(cityObj))){
-        ret = cityObj.city;
-        return ret;
-      };
+      d2 = this.locationDist2FromCity(tweetLocation, cityObj.location);
+      if (d2 < this.cityRange2Max()) {
+        if (dmin2 === undefined || dmin2 > d2) {
+            dmin2 = d2;
+            ret = cityObj.city;
+        }
+      }
     };
   }
   return ret;
