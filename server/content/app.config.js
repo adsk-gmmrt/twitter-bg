@@ -14,6 +14,9 @@ angular.
         when('/stat', {
           template: '<stat-view></stat-view>'
         }).
+        when('/main', {
+          templateUrl: 'index.template.html'
+        }).
         otherwise('/map');
     }
   ]);

@@ -29,10 +29,28 @@ module.exports = function(app) {
       }
       filter.reset(location, limit);
       res.json(filter.getResult());
-    });
+    });    
 
   app.get(config.apiEndpointPrefix + '/aggregate',
     function(req, res) {
       res.json(streamingThread.getFilter(AggregateFilter.KEY).getResult());
+    });
+
+  app.get(config.apiEndpointPrefix + '/embed/tweet', // ?id=''
+    function(req, res) {
+      request.get({
+        url: 'https://api.twitter.com/1.1/statuses/oembed.json',
+        oauth: twitterKeys,
+        qs: {
+          id: req.query.id
+        },
+        json: true
+      }, function(err, twitterRes, twitterResBody) {
+        if (err) {
+          console.log(err);
+          return res.json(err);
+        }
+        return res.json(twitterResBody);
+      });
     });
 };
