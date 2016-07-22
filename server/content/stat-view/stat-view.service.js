@@ -17,7 +17,7 @@ angular.module('twigbro.statView')
             region: 'US',
             displayMode: 'markers',
             colorAxis: { colors: ['red', 'blue'] },
-            backgroundColor: '#81d4fa',
+            backgroundColor: '#cce6ff',
             sizeAxis: { maxSize: 25 }
           },
           formatters: {
