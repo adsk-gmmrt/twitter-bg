@@ -12,13 +12,16 @@ var StreamingThread = function(locations) {
   this.createStream(); 
   this.totalTweetCount = 0;
   this.startTime = Date.now();
-  setInterval(this.logStatistic.bind(this), 10000);
+  this.lostTweets = 0;
+  setInterval(this.logStatistic.bind(this), 20000);
 };
 StreamingThread.prototype.logStatistic = function(){
   var time = (Date.now() - this.startTime)/1000;
   var t2sek = parseInt(this.totalTweetCount/time);
   var l2c = parseInt((this.seenTweets/this.totalTweetCount)*100);
-  console.log("After "+ time +' [sek] was ' + this.totalTweetCount +' tweets ( '+ t2sek + ' tweet/[sek] ) and ' + l2c + ' [%] with localization.' )
+  console.log("After "+ time +' [sek] was ' + this.totalTweetCount +' tweets ( '+ t2sek + ' tweet/[sek] ) and ' + l2c + ' [%] with localization.' );
+  if(this.lostTweets>0)
+    console.log('We lost ' + this.lostTweets +' tweets');
 }
 
 StreamingThread.prototype.createStream = function() {
@@ -30,9 +33,9 @@ StreamingThread.prototype.createStream = function() {
 };
 
 StreamingThread.prototype.onTweet = function(tweet) {
-  this.totalTweetCount ++;
   if (this.isValidTweet(tweet)) {
     this.seenTweets++;
+    this.totalTweetCount++;
     var tweetExtract = tweetUtils.filterTweetFields(tweet);
     if (tweetExtract) {
       for (var i = 0; i < this.filterKeys.length; i++) {
@@ -41,7 +44,13 @@ StreamingThread.prototype.onTweet = function(tweet) {
     }
   }
   else{
-    console.log('tweet ', JSON.stringify(tweet));
+    if(tweet.limit){
+      this.lostTweets = tweet.limit.track;
+    }
+    else{
+      this.totalTweetCount ++;
+      console.log('tweet ', JSON.stringify(tweet));
+    }
   }
 };
 
@@ -75,4 +84,4 @@ StreamingThread.prototype.getFilter = function(filterKey) {
   return this.filters[filterKey];
 };
 
-module.exports = new StreamingThread();
+module.exports = new StreamingThread(); // '-125.0,20.0,-67.0,45.0'
