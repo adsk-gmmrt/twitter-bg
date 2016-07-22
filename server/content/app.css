@@ -36,3 +36,135 @@ nav {
   padding-top:20px;
   padding-bottom:10px;
 }
+
+.stat-table {
+  font-family: Verdana, Arial, sans-serif;
+  text-align: left;
+  width: 800px;
+  border: none;
+  padding: 0px;
+}
+
+.stat-table-header {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: right;
+  color: white;
+  background-color:#202060;
+}
+
+.stat-table-header th {
+  padding: 3px 10px 3px 10px;
+}
+
+.stat-table-header-name {
+  width: 120px;
+}
+
+.stat-table-header-percent {
+  width: 60px;
+}
+
+.stat-table-header-city {
+  text-align: left;
+}
+
+.stat-table-row {
+  font-size: 12px;
+  text-align: right;
+  
+}
+
+.stat-table-row:nth-child(odd) {
+    background-color: #efeff5;
+}
+
+.stat-table-row:nth-child(even) {
+    background-color: #e0e0eb;
+}
+
+.stat-table-row:hover {
+    background-color: #c0c0cb;
+}
+
+.stat-table-row td{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.stat-table-row-city {
+  text-align: left;
+}
+
+
+html,
+body {
+    height: 100%; 
+    padding: 0;
+    margin: 0;
+}
+
+nav {
+    height:30px; 
+    border:solid 2px #aaa;
+    margin-bottom: 0px;
+}
+
+.navbar {
+    margin-bottom: 0px;
+ }
+
+section {
+    position:relative;
+    height: calc(100% - 50px);    
+}
+
+#map {
+  position:relative;
+  width:100%;
+  height:100%;
+  left:0px;
+  top: 0px;
+}
+
+#googleMap {
+  position:relative;
+  width:100%;
+  height:100%;
+  left:0px;
+  top: 0px;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #202060;   
+    text-align: center;
+}
+
+#googleMap > div {   
+    position:relative;   
+}
+
+
+#googleMap > div > div {   
+    position:relative;   
+}
+
+#chartData {
+    position:relative;
+    height: calc(100% - 500px);    
+    overflow: scroll;
+}
+
+#chartTable {
+  position:relative;
+  width:100%;
+  height:100%;
+  left:0px;
+  top: 0px; 
+}
+
+tbody {
+  overflow: scroll;
+}

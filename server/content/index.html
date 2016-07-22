@@ -2,17 +2,22 @@
 <html>
 
 <head>
-  <link rel="stylesheet" type="text/css" href="/app.css">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
   <script src="lib/underscore/underscore.js"></script>
   <script src="lib/angular/angular.js"></script>
   <script src="lib/angular-route/angular-route.js"></script>
+  <!-- Angular Material Library -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js">
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="lib/angular-google-chart/ng-google-chart.js"></script>
   <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC6sZ0MAYrJFS0M9E2Wh5F6Wey0rbgvKIo"></script>
 
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYa7ZwoXJUYaApV9Xmz_mxWKfbtHEOjSM" type="text/javascript"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+  <link rel="stylesheet" type="text/css" href="/app.css">
 
   <script src="app.js"></script>
   <script src="app.config.js"></script>
@@ -26,17 +31,25 @@
 </head>
 
 <body ng-app="twigbro.main">
-  <div>
-    <nav ng-controller="twigbroNavController">
-      <span class="nav-title">Twitter's big bro</span>
+  <!--<div>-->
+    <nav ng-controller="twigbroNavController" class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Twitter Live</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="#!/map">Map</a></li>
+          <li><a href="#!/stat">Stat</a></li>
+        </ul>
+      </div>
+    </nav>
+<!--      <span class="nav-title">Twitter's big bro</span>
       <a class="nav-toright" href="/signout">Sign out</a>
       <span class="nav-toright">{{api.getProfile().userName}}</span>
       <img class="nav-toright" src="{{api.getProfile().photoHref}}"></img>
       <div class="nav-views">
         <a href="#!/map">Map</a>
-        <a href="#!/stat">Stat</a>
-      </div>
-    </nav>
+        <a href="#!/stat">Stat</a>-->
 
     <!--<section ng-controller="twigbroTweetsController">
         <div class="tweet" ng-repeat="tweet in api.getTweets()">
@@ -50,11 +63,13 @@
         </div>
       </section>-->
 
-  </div>
+  <!--</div>-->
 
-  <div class="view-container">
-    <div ng-view class="view-frame"></div>
-  </div>
+  <!--<div class="view-container">   temp -->
+  <section>
+    <div id="container" ng-view class="view-frame"></div>
+  </section>
+  <!--</div>  temp-->
 
 </body>
 

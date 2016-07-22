@@ -9,20 +9,20 @@ angular.module('twigbro.statView')
 
         var chart = {
           type: "GeoChart",
-          cssStyle: "width: 800px; height: 400px;",
           options: {
-            width: 1000,
-            height: 700,
-            chartArea: { left: 10, top: 10, bottom: 0, width: "100%" },
-            legend: { numberFormat: "0%" },
+            width: '100%',
+            height: 500,
+            chartArea: { left: 10, top: 10, bottom: 10, right: 10, width: "100%" },
+            legend: 'none',
             region: 'US',
             displayMode: 'markers',
             colorAxis: { colors: ['red', 'blue'] },
-            backgroundColor: '#81d4fa',
+            backgroundColor: '#cce6ff',
+            sizeAxis: { maxSize: 25 }
           },
           formatters: {
             number: [{
-              columnNum: 2,
+              columnNum: 3,
               pattern: "0%"
             }]
           },
@@ -54,17 +54,17 @@ angular.module('twigbro.statView')
           var keyTrump = 'trump';
 
           var output = [
-            ['latitude', 'longitude', 'Votes for Clinton', 'Total votes'],
+            ['latitude', 'longitude', 'City', 'Clinton mentioned in', 'of all election tweets'],
           ]
 
-          var cities = [['City']];
+          var cities = ['City'];
 
           for (var cityname in cityData) {
             var city = cityData[cityname];
             var totalVotes = city[keyClinton] + city[keyTrump];
             if (totalVotes > 0) {
               cities.push(cityname);
-              output.push([city.location.latitude, city.location.longitude, city[keyClinton] / totalVotes, totalVotes]);
+              output.push([city.location.latitude, city.location.longitude, cityname, city[keyClinton] / totalVotes, totalVotes]);
             }
           }
 
