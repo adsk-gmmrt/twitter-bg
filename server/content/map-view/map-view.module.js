@@ -171,14 +171,15 @@ angular.module('twigbro.mapView', ['ngtweet'])
     // that.getMap()._infoWindow.close();
     // that.getMap()._infoWindow.setContent(tweetMarkup);
     // that.getMap()._infoWindow.open(that.getMap(),that);
-
+    that.getMap()._infoWindow.close();
     MapViewState.getTweetHtml(this.tweet).then( function(html){
       //var tweetMarkup = '<twitter-widget twitter-widget-id="\'' + that.tweet.id_str +'\'"></twitter-widget>';
       var tweetMarkup = '<twitter-widget>'+ html +'</twitter-widget>';
-      var compiled = $compile(tweetMarkup)($scope);      
-      that.getMap()._infoWindow.close();
+      var compiled = $compile(tweetMarkup)($scope);
       that.getMap()._infoWindow.setContent(compiled[0]);
-      that.getMap()._infoWindow.open(that.getMap(),that);
+      setTimeout(function(){
+        that.getMap()._infoWindow.open(that.getMap(),that);
+      }, 500);
     });
   }
 
