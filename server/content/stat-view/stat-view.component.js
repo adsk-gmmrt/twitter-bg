@@ -8,6 +8,9 @@ angular.
 
       function StatViewController(StatService) {
 
+        var idxClinton = 3;
+        var idxTotal = 4;
+
         this.loadData = function () {
           var self = this;
           StatService.getVotes().then(function (result) {
@@ -17,22 +20,22 @@ angular.
         }
 
         this.getTotal = function (index) {
-          return this.chart.data[index][3];
+          return this.chart.data[index][idxTotal];
         }
 
         this.getVotes = function (index, name) {
           if (name === 'clinton') {
-            return (this.chart.data[index][2] * this.chart.data[index][3]).toFixed();
+            return (this.chart.data[index][idxClinton] * this.chart.data[index][idxTotal]).toFixed();
           } else if (name === 'trump') {
-            return ((1 - this.chart.data[index][2]) * this.chart.data[index][3]).toFixed();
+            return ((1 - this.chart.data[index][idxClinton]) * this.chart.data[index][idxTotal]).toFixed();
           }
         }
 
         this.getPercent = function (index, name) {
           if (name === 'clinton') {
-            return (this.chart.data[index][2] * 100).toFixed(1);
+            return (this.chart.data[index][idxClinton] * 100).toFixed(1);
           } else if (name === 'trump') {
-            return ((1 - this.chart.data[index][2]) * 100).toFixed(1);
+            return ((1 - this.chart.data[index][idxClinton]) * 100).toFixed(1);
           }
         }
 
