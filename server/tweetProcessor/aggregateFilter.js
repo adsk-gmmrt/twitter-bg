@@ -5,8 +5,8 @@ var tweetUtils = require('./tweetUtils');
 
 var AggregateFilter = function() {
   this.words = {
-    'clinton' : 0,
-    'trump': 0
+    'to' : 0,
+    'of': 0
   };
   this.result = {};
   this.total = 0;
@@ -14,27 +14,11 @@ var AggregateFilter = function() {
     this.result[key] = Object.assign({}, this.words);
     this.result[key].location = citiesData[key].location;  
   };
-  this.count = 0;
-  setInterval(this.log.bind(this), 30000)
 };
-AggregateFilter.prototype.log= function() {
-  var trump = 0;
-  var clinton=0;
-  console.log('AggregateFilter analized ',this.count, ' tweets.')
-  for(var k in this.result){
-    if(this.result[k].clinton > 0 || this.result[k].trump > 0){
-      trump +=this.result[k].trump;
-      clinton += this.result[k].clinton;
-      console.log(k,' : Trump-',this.result[k].trump, ', Clinton-',this.result[k].clinton)
-    }
-  }
-  console.log('Found ',trump+clinton, ' words ',trump, '-Trump ', clinton, '-Clinton.' )
-}
 
 AggregateFilter.KEY = 'aggregateFilter';
 
 AggregateFilter.prototype.process = function(tweet) {
-  this.count++;
   var wordsInCity = tweetUtils.wordsInCity(tweet, this.words);
   for (var kCity in wordsInCity) {
     for (var kWord in wordsInCity[kCity]) {

@@ -4,12 +4,12 @@ angular.module('twigbro.mapView', [])
 .factory('MapViewState', function($window, $http){
 	//-------------------------------------------
     // Configuration
-	var markerBufferSize = 100;         // max number of displayed tweets
-	var readTweetsLimit = 50;          // one GET request limit
+	var markerBufferSize = 500;         // max number of displayed tweets
+	var readTweetsLimit = 200;          // one GET request limit
 	var readTweetsInterval = 1000;      // miliseconds
-    var checkTweetsAgeInterval = 2000;  // miliseconds
+    var checkTweetsAgeInterval = 5000;  // miliseconds
 
-    var ageArr = [2,4,6,8,10,12,14,16,18,20];  // in seconds (<10) age === 1, (<20)age === 2 etc.
+    var ageArr = [10,20,30,40,60,80,100,120,180];  // in seconds (<10) age === 1, (<20)age === 2 etc.
     //--------------------------------------------
 
 
@@ -44,24 +44,15 @@ angular.module('twigbro.mapView', [])
 	    return $http({ method: 'GET', 
     	           url: url
     	}).then(function (resp) {
-        var retValue = {
-          newTweets: {},
-          allTweets: tweets
-        };
-        $window._.each(resp.data, function(value, key) {
-          if(!(key in tweets)) {
-            retValue.newTweets[key] = retValue.allTweets[key] = value;
-          }
-        });
-    		tweets = retValue.allTweets;
+    		$window._.extend( tweets, resp.data);
     		var toDeleteCount = Object.keys(tweets).length - markerBufferSize;
     		if( toDeleteCount > 0 ){
     			deleteOldestTweets(toDeleteCount);
     		}
-      	return retValue;
+      		return { newTweets : resp.data, allTweets : tweets };
     	}).catch(function(err){
-        console.log(err);
-    	});
+
+    	})
    	}
 	
 	return { 
