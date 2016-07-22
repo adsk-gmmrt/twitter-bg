@@ -2,3 +2,4 @@ node_modules
 server/content/lib
 server/auth/twitterKeys.js
 npm-debug.log
+server/data/agregateFilterLocal.json
