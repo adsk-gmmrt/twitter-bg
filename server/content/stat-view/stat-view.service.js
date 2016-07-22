@@ -10,8 +10,8 @@ angular.module('twigbro.statView')
         var chart = {
           type: "GeoChart",
           options: {
-            width: 800,
-            height: 400,
+            width: '100%',
+            height: 500,
             chartArea: { left: 10, top: 10, bottom: 10, right: 10, width: "100%" },
             legend: 'none', // { numberFormat: "0%" },
             region: 'US',
