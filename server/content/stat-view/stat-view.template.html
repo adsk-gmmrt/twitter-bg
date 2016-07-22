@@ -1,2 +1,25 @@
 <div google-chart chart="{{$ctrl.chart}}" style="{{$ctrl.cssStyle}}"></div>
-<!--<a href="#" ng-click="{{$ctrl.loadData}}">Refresh</a>-->
+<div ng-if="$ctrl.chart.data.length > 1">
+  <!--{{$ctrl.chart.data | json}}-->
+  <table class="stat-table">
+    <thead>
+      <tr class="stat-table-header">
+        <th class="stat-table-header-city">City</th>
+        <th>Total</th>
+        <th class="stat-table-header-name">Clinton</th>
+        <th class="stat-table-header-percent">[%]</th>
+        <th class="stat-table-header-name">Trump</th>
+        <th class="stat-table-header-percent">[%]</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="stat-table-row" ng-repeat="c in $ctrl.chart.data track by $index" ng-if="$index > 0">
+        <td class="stat-table-row-city">{{$ctrl.cities[$index]}}</td>
+        <td>{{$ctrl.getTotal($index)}}</td>
+        <td class="stat-table-row-votes">{{$ctrl.getVotes($index, 'clinton')}}</td>
+        <td>{{$ctrl.getPercent($index, 'clinton')}}</td>
+        <td class="stat-table-row-votes">{{$ctrl.getVotes($index, 'trump')}}</td>
+        <td>{{$ctrl.getPercent($index, 'trump')}}</td>
+      </tr>
+    </tbody>
+  </table>
