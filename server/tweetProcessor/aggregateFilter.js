@@ -1,5 +1,7 @@
 var citiesData = require('../data/citiesData');  // TODO - for this implementation we agregate data for predefined set of cities in US
 var tweetUtils = require('./tweetUtils');
+var fs = require('fs');
+var filename = "./server/data/agregateFilter.txt"
 
 
 
@@ -10,12 +12,19 @@ var AggregateFilter = function() {
   };
   this.result = {};
   this.total = 0;
+  try{
+    this.result = JSON.parse(fs.readFileSync(filename, 'utf8'));
+  }
+  catch(err)
+  {
+    this.result = {};
+  };
   for(var key in citiesData){
     this.result[key] = Object.assign({}, this.words);
     this.result[key].location = citiesData[key].location;  
   };
   this.count = 0;
-  setInterval(this.log.bind(this), 30000)
+  setInterval(this.log.bind(this), 30000);
 };
 AggregateFilter.prototype.log= function() {
   var trump = 0;
@@ -29,6 +38,11 @@ AggregateFilter.prototype.log= function() {
     }
   }
   console.log('Found ',trump+clinton, ' words ',trump, '-Trump ', clinton, '-Clinton.' )
+  fs.writeFile(filename, JSON.stringify(this.result), 'utf8', function (err) {
+    if (err) {
+      return console.log(err);
+    }
+  });
 }
 
 AggregateFilter.KEY = 'aggregateFilter';
