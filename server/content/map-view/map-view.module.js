@@ -9,7 +9,7 @@ angular.module('twigbro.mapView', [])
 	var readTweetsInterval = 1000;      // miliseconds
     var checkTweetsAgeInterval = 2000;  // miliseconds
 
-    var ageArr = [2,4,6,8,10,12,14,16,18,20];  // in seconds (<10) age === 1, (<20)age === 2 etc.
+    var ageArr = [2,4,6,12,20,30,40,50,60];  // in seconds (<10) age === 1, (<20)age === 2 etc.
     //--------------------------------------------
 
 

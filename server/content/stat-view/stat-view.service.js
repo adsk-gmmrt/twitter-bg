@@ -5,7 +5,42 @@ angular.module('twigbro.statView')
 
     function ($http) {
 
-      var getVotes = function (name) {
+      var createChart = function () {
+
+        var chart = {
+          type: "GeoChart",
+          cssStyle: "width: 800px; height: 400px;",
+          options: {
+            width: 1000,
+            height: 700,
+            chartArea: { left: 10, top: 10, bottom: 0, width: "100%" },
+            legend: { numberFormat: "0%" },
+            region: 'US',
+            displayMode: 'markers',
+            colorAxis: { colors: ['red', 'blue'] },
+            backgroundColor: '#81d4fa',
+          },
+          formatters: {
+            number: [{
+              columnNum: 2,
+              pattern: "0%"
+            }]
+          },
+          data: getEmptyData()
+        }
+
+        return chart;
+      };
+
+      var getEmptyData = function () {
+        return [
+          ['latitude', 'longitude'],
+          [0, 0]
+        ];
+      }
+
+
+      var getVotes = function () {
 
         return $http({
           method: 'GET',
@@ -15,38 +50,32 @@ angular.module('twigbro.statView')
           var data = [];
           var cityData = response.data;
 
-          var keyClinton = 'to';
-          var keyTrump = 'of';
-
-          var validName = name[0].toUpperCase() + name.slice(1);
-
-          var votesHeader = 'Votes for ' + validName;
-          var votesKey;
+          var keyClinton = 'clinton';
+          var keyTrump = 'trump';
 
           var output = [
-            [
-              'City',
-              votesHeader,
-              'Total votes'
-            ]
+            ['latitude', 'longitude', 'Votes for Clinton', 'Total votes'],
           ]
 
-          if (validName === 'Clinton') {
-            votesKey = keyClinton;
-          } else if (validName === 'Trump') {
-            votesKey = keyTrump;
-          }
+          var cities = [['City']];
 
-          if (votesKey !== undefined) {
-            for (var city in cityData) {
-              var totalVotes = cityData[city][keyClinton] + cityData[city][keyTrump];
-              if (totalVotes > 0) {
-                output.push([city, cityData[city][votesKey] / totalVotes, totalVotes]);
-              }
+          for (var cityname in cityData) {
+            var city = cityData[cityname];
+            var totalVotes = city[keyClinton] + city[keyTrump];
+            if (totalVotes > 0) {
+              cities.push(cityname);
+              output.push([city.location.latitude, city.location.longitude, city[keyClinton] / totalVotes, totalVotes]);
             }
           }
 
-          return output;
+          if (cities.length === 1) {
+            output = getEmptyData();
+          }
+
+          return {
+            "cities": cities,
+            "data": output
+          }
 
         }, function errorCallback(response) {
           var r = response;
@@ -54,6 +83,7 @@ angular.module('twigbro.statView')
       }
 
       return {
+        createChart: createChart,
         getVotes: getVotes,
       }
 

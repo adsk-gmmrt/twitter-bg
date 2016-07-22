@@ -13,7 +13,7 @@ var StreamingThread = function(locations) {
   this.totalTweetCount = 0;
   this.startTime = Date.now();
   this.lostTweets = 0;
-  setInterval(this.logStatistic.bind(this), 10000);
+  setInterval(this.logStatistic.bind(this), 20000);
 };
 StreamingThread.prototype.logStatistic = function(){
   var time = (Date.now() - this.startTime)/1000;
@@ -47,8 +47,10 @@ StreamingThread.prototype.onTweet = function(tweet) {
     if(tweet.limit){
       this.lostTweets = tweet.limit.track;
     }
-    this.totalTweetCount ++;
-    console.log('tweet ', JSON.stringify(tweet));
+    else{
+      this.totalTweetCount ++;
+      console.log('tweet ', JSON.stringify(tweet));
+    }
   }
 };
 
@@ -82,4 +84,4 @@ StreamingThread.prototype.getFilter = function(filterKey) {
   return this.filters[filterKey];
 };
 
-module.exports = new StreamingThread();
+module.exports = new StreamingThread(); // '-125.0,20.0,-67.0,45.0'
