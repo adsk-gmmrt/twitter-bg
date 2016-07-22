@@ -2,6 +2,7 @@ var citiesData = require('../data/citiesData');  // TODO - for this implementati
 var tweetUtils = require('./tweetUtils');
 var fs = require('fs');
 var filename = "./server/data/agregateFilter.json"
+var filenameLocal = "./server/data/agregateFilterLocal.json"
 
 
 var AggregateFilter = function() {
@@ -17,11 +18,12 @@ var AggregateFilter = function() {
     this.result[key].location = citiesData[key].location;  
   };
   this.deserialize();
+
   this.count = 0;
   setInterval(this.log.bind(this), 30000);
 };
 AggregateFilter.prototype.serialize = function(){
-   fs.writeFile(filename, JSON.stringify(this.result), 'utf8', function (err) {
+   fs.writeFile(filenameLocal, JSON.stringify(this.result), 'utf8', function (err) {
      if (err) {
        return console.log(err);
      }
@@ -32,7 +34,13 @@ AggregateFilter.prototype.serialize = function(){
 }
 AggregateFilter.prototype.deserialize = function(){
     try{
-      var fromFile = fs.readFileSync(filename, 'utf8');
+     var exists = fs.existsSync(filenameLocal);
+      if(!exists){
+        var fromFile = fs.readFileSync(filename, 'utf8');
+        var serializedResults = JSON.parse(fromFile);
+        fs.writeFileSync(filenameLocal, JSON.stringify(serializedResults), 'utf8');
+      }
+      var fromFile = fs.readFileSync(filenameLocal, 'utf8');
       var serializedResults = JSON.parse(fromFile);
       var dataOK = true;
       for(var ks in serializedResults)
