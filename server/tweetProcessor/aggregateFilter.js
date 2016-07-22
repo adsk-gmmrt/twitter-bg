@@ -64,18 +64,62 @@ AggregateFilter.prototype.deserialize = function(){
     }
 }
 AggregateFilter.prototype.log= function() {
-  var trump = 0;
-  var clinton=0;
-  console.log('AggregateFilter analized ',this.count, ' tweets.')
-  for(var k in this.result){
-    if(this.result[k].clinton > 0 || this.result[k].trump > 0){
-      trump +=this.result[k].trump;
-      clinton += this.result[k].clinton;
-      console.log(k,' : Trump-',this.result[k].trump, ', Clinton-',this.result[k].clinton)
+  this.serialize();
+  var agregateData = {};
+  var city = {};
+  var consoleLog = '';
+  var initAgregate = true;
+  for(var kCity in this.result){
+    city = this.result[kCity];
+    var dataInCity = false;
+    for(var kWords in city){
+      if(typeof city[kWords] === 'number'){
+        if(initAgregate){
+          agregateData[kWords] = 0;
+          dataInCity = dataInCity || city[kWords] > 0
+        }
+        else{
+          dataInCity = city[kWords] > 0
+          if(dataInCity){
+            break;
+          }
+        }
+      }
+    }
+    if(dataInCity){
+      var consoleLog = kCity + ' : '
+      for(var kWords in city){
+        if(typeof city[kWords] === 'number'){
+          agregateData[kWords] += city[kWords];
+          consoleLog += kWords + ':' + city[kWords] +', ';
+        }
+      }
+      console.log(consoleLog);
+    }
+    initAgregate = false;
+  }
+  consoleLog = 'Global: ';
+  var total =0;
+  for(var kWords in agregateData){
+    if(typeof agregateData[kWords] === 'number'){
+        consoleLog += kWords+':'+ agregateData[kWords] + ', ';
+        total += agregateData[kWords];
     }
   }
-  console.log('Found ',trump+clinton, ' words ',trump, '-Trump ', clinton, '-Clinton.' )
-  this.serialize();
+  consoleLog += 'total:' + total;
+  console.log(consoleLog);
+  // var trump = 0;
+  // var clinton=0;
+  // console.log('AggregateFilter analized ',this.count, ' tweets.')
+  // for(var k in this.result){
+  //   if(this.result[k].clinton > 0 || this.result[k].trump > 0){
+  //     trump +=this.result[k].trump;
+  //     clinton += this.result[k].clinton;
+  //     console.log(k,' : Trump-',this.result[k].trump, ', Clinton-',this.result[k].clinton)
+  //   }
+  // }
+  // console.log('Found ',trump+clinton, ' words ',trump, '-Trump ', clinton, '-Clinton.' )
+  
 }
 
 AggregateFilter.KEY = 'aggregateFilter';
