@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('twigbro.mapView', [])
+angular.module('twigbro.mapView', ['ngtweet'])
 .factory('MapViewState', function($window, $http){
 	//-------------------------------------------
     // Configuration
@@ -63,6 +63,14 @@ angular.module('twigbro.mapView', [])
         console.log(err);
     	});
    	}
+
+    var getTweetHtml = function (tweet) {
+      return $http.get('/api/v1/embed/tweet?id=' + tweet.id_str).then(function (resp) {
+        return resp.data.html;
+      }).catch(function (err) {
+        console.log(err);
+      });
+    };
 	
 	return { 
       readTweets:readTweets,
@@ -70,10 +78,11 @@ angular.module('twigbro.mapView', [])
       mapProp:mapProp,
       readTweetsInterval:readTweetsInterval,
       checkTweetsAgeInterval:checkTweetsAgeInterval,
-      ageArr:ageArr 
+      ageArr:ageArr,
+      getTweetHtml:getTweetHtml
     };
 })
-.controller('MapViewController', function ($scope, $document, $window, MapViewState) {
+.controller('MapViewController', function ($scope, $document, $window, $compile, MapViewState) {
   // Your code here
   $scope.map = null; 
 
@@ -157,9 +166,20 @@ angular.module('twigbro.mapView', [])
     if (!this.getMap()._infoWindow) {
         this.getMap()._infoWindow = new google.maps.InfoWindow();
     }
-    this.getMap()._infoWindow.close();
-    this.getMap()._infoWindow.setContent(this.text);
-    this.getMap()._infoWindow.open(this.getMap(), this);
+    var that = this;
+    // var tweetMarkup = '<twitter-widget twitter-widget-id="\'' + this.tweet.id_str +'\'"></twitter-widget>';
+    // that.getMap()._infoWindow.close();
+    // that.getMap()._infoWindow.setContent(tweetMarkup);
+    // that.getMap()._infoWindow.open(that.getMap(),that);
+
+    MapViewState.getTweetHtml(this.tweet).then( function(html){
+      //var tweetMarkup = '<twitter-widget twitter-widget-id="\'' + that.tweet.id_str +'\'"></twitter-widget>';
+      var tweetMarkup = '<twitter-widget>'+ html +'</twitter-widget>';
+      var compiled = $compile(tweetMarkup)($scope);      
+      that.getMap()._infoWindow.close();
+      that.getMap()._infoWindow.setContent(compiled[0]);
+      that.getMap()._infoWindow.open(that.getMap(),that);
+    });
   }
 
   $scope.createMarker = function(tweet){
@@ -169,7 +189,8 @@ angular.module('twigbro.mapView', [])
           lng : tweet.coordinates.coordinates[0] || $scope.randomLat(),
           lat : tweet.coordinates.coordinates[1] || $scope.randomLng()
         }),
-        text: tweet.text
+        text: tweet.text,
+        tweet: tweet
       });
 
     tweet.marker.setIcon( $scope.getIcon( $scope.getAge( new Date, tweet)));

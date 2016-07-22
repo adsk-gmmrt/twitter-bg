@@ -1,6 +1,12 @@
 var fs = require('fs');
 var citiesData = require('../data/citiesData');
 
+var tweetsWithWords = 0;
+var tweetsWithWordsDiscarded = 0;
+var tweetsWithWordsAll = 0;
+var tweetsWithWordsAllDiscarded = 0;
+
+
 var tweetSchema = {
     "created_at": "Wed Jul 20 10:08:38 +0000 2016",
     "id_str": "755705971243094016",
@@ -187,13 +193,15 @@ locationDist2FromCity: function (location, locationCity) {
   return dLatitude * dLatitude + dLongitude * dLongitude;
 },
 
-
 tweetInCity: function (tweet) {
   var ret = '';
   if(tweet.place && tweet.place.place_type === "city" && 
      tweet.place.name && tweet.place.name.length>0){
-    if (citiesData[tweet.place.name])
+    if (citiesData[tweet.place.name]) {
+      tweetsWithWords += 1;
+      tweetsWithWordsAll += 1;
       return citiesData[tweet.place.name].city;
+    }
   }
   if (tweet.place && tweet.place.country_code === "US") {
     var tweetLocation = {
@@ -212,13 +220,20 @@ tweetInCity: function (tweet) {
         }
       }
     };
+    tweetsWithWords += 1;
+    if (ret === '')
+        tweetsWithWordsDiscarded += 1;
   }
+  tweetsWithWordsAll += 1;
+  if (ret === '')
+    tweetsWithWordsAllDiscarded += 1;
   return ret;
 },
 wordsInTweets:function(tweet,words){
   var isWord = false;
   var tweetText = tweet.text.toLowerCase();
   var ret = {};
+  var added = false;
   if(Array.isArray(words))
   {
     for(var i=0; i < words.length; i++ )
@@ -226,17 +241,21 @@ wordsInTweets:function(tweet,words){
         isWord = tweetText.indexOf(words[i]) >= 0;
         if(isWord){
             ret[words[i]]= isWord;
+            added = true;
         }
     }
-    return ret; 
+    if (added) 
+      return ret; 
   } else if(typeof words === 'object'){
     for(var k in words){
         isWord = tweetText.indexOf(k) >= 0;
         if(isWord){
             ret[k]= isWord;
+            added = true;
         }
     }
-    return ret;
+    if (added) 
+      return ret; 
   } else if (typeof words === 'string'){
     isWord = tweetText.indexOf(words) >= 0;
     if(isWord){
