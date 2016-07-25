@@ -3,6 +3,8 @@
 ##Description
 Twitter Big Data is a project created during 2016 Krakow Bootcamp training hackathon. It's main goal was to investigate a possibility of using public stream of tweets that are provided near real time by Twitter API to do geospatial analysis.
 
+![Application screen](screen.png)
+
 ##Contributors
 Grzegorz Skiba <Grzegorz.Skiba@autodesk.com> <br>
 Maciej Sapun <Maciej.Sapun@autodesk.com> <br>
