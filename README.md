@@ -6,7 +6,7 @@ Twitter Big Data is a project created during 2016 Krakow Bootcamp training hacka
 ##Contributors
 Grzegorz Skiba <Grzegorz.Skiba@autodesk.com> <br>
 Maciej Sapun <Maciej.Sapun@autodesk.com> <br>
-Michał Gwizdz <Michal.Gwizdz@autodesk.com> <br>
+Michał Gwiżdż <Michal.Gwizdz@autodesk.com> <br>
 Robert Woźniak <Robert.Wozniak@autodesk.com> <br>
 Tomasz Domański <Tomasz.Domanski@autodesk.com> <br>
 
